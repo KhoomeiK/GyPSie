@@ -1,0 +1,188 @@
+{
+    "geocoded_waypoints" : [
+       {
+          "geocoder_status" : "OK",
+          "place_id" : "ChIJRe3cKCi1j4AROqKgllUlG-c",
+          "types" : [ "premise" ]
+       },
+       {
+          "geocoder_status" : "OK",
+          "place_id" : "ChIJ6xPq-NpKjoAR4dQ8yoH2RS8",
+          "types" : [ "establishment", "point_of_interest", "school" ]
+       }
+    ],
+    "routes" : [
+       {
+          "bounds" : {
+             "northeast" : {
+                "lat" : 37.2838448,
+                "lng" : -122.0296496
+             },
+             "southwest" : {
+                "lat" : 37.2667596,
+                "lng" : -122.0384368
+             }
+          },
+          "copyrights" : "Map data ©2018 Google",
+          "legs" : [
+            
+             { // total trip
+                "distance" : {
+                   "text" : "1.7 mi",
+                   "value" : 2670
+                },
+                "duration" : {
+                   "text" : "5 mins",
+                   "value" : 294
+                },
+                "end_address" : "20300 Herriman Ave, Saratoga, CA 95070, USA",
+                "end_location" : {
+                   "lat" : 37.2667596,
+                   "lng" : -122.0296496
+                },
+                "start_address" : "12742 Arroyo De Arguello, Saratoga, CA 95070, USA",
+                "start_location" : {
+                   "lat" : 37.2832397,
+                   "lng" : -122.0384324
+                },
+
+                "steps" : [ // individual steps of trip
+
+                   { // 1
+                      "distance" : {
+                         "text" : "207 ft",
+                         "value" : 63
+                      },
+                      "duration" : {
+                         "text" : "1 min",
+                         "value" : 8
+                      },
+                      "end_location" : {
+                         "lat" : 37.2838036,
+                         "lng" : -122.038408
+                      },
+                      "html_instructions" : "Head \u003cb\u003enorth\u003c/b\u003e on \u003cb\u003eArroyo De Arguello\u003c/b\u003e toward \u003cb\u003eWardell Rd\u003c/b\u003e",
+                      "polyline" : {
+                         "points" : "g{pbFdszgVMAM?m@Be@E"
+                      },
+                      "start_location" : {
+                         "lat" : 37.2832397,
+                         "lng" : -122.0384324
+                      },
+                      "travel_mode" : "DRIVING"
+                   },
+
+                   { // 2
+                      "distance" : {
+                         "text" : "0.3 mi",
+                         "value" : 541
+                      },
+                      "duration" : {
+                         "text" : "1 min",
+                         "value" : 86
+                      },
+                      "end_location" : {
+                         "lat" : 37.2834419,
+                         "lng" : -122.0324414
+                      },
+                      "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e onto \u003cb\u003eWardell Rd\u003c/b\u003e",
+                      "maneuver" : "turn-right",
+                      "polyline" : {
+                         "points" : "w~pbF`szgVGwE@eFA}E@aCCoB@c@?S@K@C@E@E@GBGBEBELWLSNWJw@@o@"
+                      },
+                      "start_location" : {
+                         "lat" : 37.2838036,
+                         "lng" : -122.038408
+                      },
+                      "travel_mode" : "DRIVING"
+                   },
+
+                   { // 3
+                      "distance" : {
+                         "text" : "1.1 mi",
+                         "value" : 1784
+                      },
+                      "duration" : {
+                         "text" : "2 mins",
+                         "value" : 135
+                      },
+                      "end_location" : {
+                         "lat" : 37.267405,
+                         "lng" : -122.0320529
+                      },
+                      "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e onto \u003cb\u003eSaratoga Sunnyvale Rd\u003c/b\u003e",
+                      "maneuver" : "turn-right",
+                      "polyline" : {
+                         "points" : "o|pbFvmygVpA@vDBdA?zAA`BEdBEpACxAEP?pBExCG|@Cr@Ch@Ad@?v@?xGEvA?xCApKGxAAb@?vBApAAF?\\AtAAfDCdCCbA?zBA"
+                      },
+                      "start_location" : {
+                         "lat" : 37.2834419,
+                         "lng" : -122.0324414
+                      },
+                      "travel_mode" : "DRIVING"
+                   },
+
+                   { // 4
+                      "distance" : {
+                         "text" : "0.1 mi",
+                         "value" : 182
+                      },
+                      "duration" : {
+                         "text" : "1 min",
+                         "value" : 33
+                      },
+                      "end_location" : {
+                         "lat" : 37.2673779,
+                         "lng" : -122.0299948
+                      },
+                      "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e onto \u003cb\u003eHerriman Ave\u003c/b\u003e",
+                      "maneuver" : "turn-left",
+                      "polyline" : {
+                         "points" : "gxmbFhkygV?]@aE?s@@gC"
+                      },
+                      "start_location" : {
+                         "lat" : 37.267405,
+                         "lng" : -122.0320529
+                      },
+                      "travel_mode" : "DRIVING"
+                   },
+
+                   { // 5
+                      "distance" : {
+                         "text" : "328 ft",
+                         "value" : 100
+                      },
+                      "duration" : {
+                         "text" : "1 min",
+                         "value" : 32
+                      },
+                      "end_location" : {
+                         "lat" : 37.2667596,
+                         "lng" : -122.0296496
+                      },
+                      "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003eDestination will be on the right\u003c/div\u003e",
+                      "maneuver" : "turn-right",
+                      "polyline" : {
+                         "points" : "cxmbFl~xgVzBB?gA"
+                      },
+                      "start_location" : {
+                         "lat" : 37.2673779,
+                         "lng" : -122.0299948
+                      },
+                      "travel_mode" : "DRIVING"
+                   }
+                ],
+                "traffic_speed_entry" : [],
+                "via_waypoint" : []
+             }
+          ],
+          "overview_polyline" : {
+             "points" : "g{pbFdszgV[Am@Be@EGwE@eF?_JAsC@_@FWXk@\\k@Jw@@o@hGD`DArJUzIQzDEdf@UbHGhECzBA?]@uF@gCzBB?gA"
+          },
+          "summary" : "Saratoga Sunnyvale Rd",
+          "warnings" : [],
+          "waypoint_order" : []
+       }
+    ],
+    "status" : "OK"
+ }
