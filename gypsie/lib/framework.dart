@@ -11,9 +11,27 @@ class RealWorldApp extends StatefulWidget {
  }
 
  class RealWorldState extends State<RealWorldApp> {
+   var _isLoading = true;
+
+
    @override
      Widget build(BuildContext context) {
-       // TODO: implement build
-       return null;
+       return new MaterialApp(
+         home: new Scaffold(
+           appBar: new AppBar(
+             title: new Text("GyPSie Navigation"),
+             actions: <Widget>[
+               new IconButton(icon: new Icon(Icons.search),
+               onPressed: () {
+                  print("Destination");
+               },)
+             ],
+           ),
+           body: new Center(
+             child: _isLoading ?  new CircularProgressIndicator() : 
+              new Text("The Future of Navigation"),
+           ),
+         ),
+       );
      }
  }

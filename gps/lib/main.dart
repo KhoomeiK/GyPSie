@@ -12,7 +12,7 @@ class RealWorldApp extends StatefulWidget {
  }
 
  class RealWorldState extends State<RealWorldApp> {
-   var _isLoading = true;
+   var _isLoading = false;
 
 
    @override
@@ -25,12 +25,23 @@ class RealWorldApp extends StatefulWidget {
                new IconButton(icon: new Icon(Icons.search),
                onPressed: () {
                   print("Destination");
+                  _isLoading = false;
                },)
              ],
            ),
            body: new Center(
              child: _isLoading ?  new CircularProgressIndicator() : 
-              new Text("The Future of Navigation"),
+              new ListView.builder(
+                itemCount: 2,
+                itemBuilder: (context, i) {
+                  return new TextField(
+                   decoration: new InputDecoration(
+                    border: InputBorder.none,
+                     hintText: 'Please enter a search term'
+                      ),
+                  );; 
+                }
+              ),
            ),
          ),
        );
