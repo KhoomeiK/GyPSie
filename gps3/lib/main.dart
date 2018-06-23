@@ -15,5 +15,4 @@ class GyPSie extends StatelessWidget {
       home: MainPage(),
     );
   }
-}
-
+} // white = bluetooth tx
