@@ -8,7 +8,8 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 class Algorithm {
   String link; // api link
-  var resp, legs, steps, deviceConnection, blue, scanSubscription; // navigation directions 
+  var resp, legs, steps, deviceConnection, scanSubscription; // navigation directions
+  FlutterBlue blue;
 
   Algorithm(){ // constructor
     link = "";
@@ -20,13 +21,13 @@ class Algorithm {
   }
 
   scan() { // connect to bluetooth device
+    List<List<String>> devices = [];
     scanSubscription = blue.scan().listen((scanResult) {
-      print(scanResult.device.id);     
+      devices.add([scanResult.device.name, scanResult.device.id.toString()]);
       // display scanResults to user and wait for them to pick one (show as a popup with list maybe?)
       // once user selects a device
-      if (scanResult.device.id.toString() == "627A2C77-148D-4B22-20DD-438840F17322")
-        connect(scanResult.device);
     });
+    return devices;
   }
 
   connect(band) {
@@ -43,8 +44,6 @@ class Algorithm {
     deviceConnection.cancel();
   }
 
-  
-  
   setPoints(origin, dest) async { // receives origin and destination from textbox and 
     if (origin == "Current Location") { // uses current location as origin
       var loc = await getLoc();
