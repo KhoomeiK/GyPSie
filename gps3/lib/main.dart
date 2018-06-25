@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import './pages/main_page.dart';
-import './pages/algorithm.dart';
-
+import 'pages/main_page.dart';
 
 void main() {
   runApp(new GyPSie());
@@ -15,4 +13,4 @@ class GyPSie extends StatelessWidget {
       home: MainPage(),
     );
   }
-} // white = bluetooth tx
+}
