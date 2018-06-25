@@ -38,6 +38,12 @@ class Algorithm {
       }
     });
   }
+
+  disconnect() {
+    deviceConnection.cancel();
+  }
+
+  
   
   setPoints(origin, dest) async { // receives origin and destination from textbox and 
     if (origin == "Current Location") { // uses current location as origin

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import './pages/main_page.dart';
-import './pages/algorithm.dart';
-
 
 void main() {
   runApp(new GyPSie());
@@ -17,3 +15,4 @@ class GyPSie extends StatelessWidget {
   }
 }
 
+// white = bluetooth tx 
