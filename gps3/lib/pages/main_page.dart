@@ -14,16 +14,50 @@ class MainPageState extends State<MainPage>{
   dynamic _borderRadius = new BorderRadius.circular(20.0);
   String origin1;
   String destination;
+  List<List<String>> blueName; 
 
-  // Widget blueMenu = new PopupMenuButton<ScanSubscription<ScanResult>(
-  //   onSelected: (String band) {},
-  //     itemBuilder: (BuildContext context) => <PopupMenuEntry<WhyFarther>>[
-  //       const PopupMenuItem<String>(
-  //         value: WhyFarther.harder,
-  //         child: const Text('Working a lot harder')
-  //     ),
-  //   ],
-  // )
+
+   Widget _blueMenu()
+  {
+    return PopupMenuButton<ScanSubscription<ScanResult>(
+      padding: EdgeInsets.all(20.0),
+      elevation: 8.0,
+      child: Text("Available Bluetooth Devices", style: TextStyle(color: Colors.white, fontSize: 20.0)),
+      shape: RoundedRectangleBorder(borderRadius: _borderRadius),
+      onPressed: (){ 
+        _buildBlueList();
+        },
+      color: Colors.lightBlue,
+      splashColor: Colors.blue,
+    );
+  }
+
+
+  Widget _buildBlueList(){
+    blueName = backEnd.scan();
+    return ListView.builder(
+      itemCount: blueName.length,
+      itemBuilder: (context, i) {
+        return new Column(
+          children: <Widget>[
+            new RaisedButton(
+            padding: EdgeInsets.all(2.0),
+            elevation: 3.0,
+             child: Text(blueName[i][0], style: TextStyle(color: Colors.white, fontSize: 2.0)),
+             shape: RoundedRectangleBorder(borderRadius: _borderRadius),
+             onPressed: (){ 
+             backEnd.connect(blueName[i][1]);
+             },
+             color: Colors.lightBlue,
+             splashColor: Colors.blue,
+             )
+          ],
+        );
+      }
+    );
+  }
+
+
 
   Widget _buildForm(){
     return Form(
@@ -95,6 +129,13 @@ class MainPageState extends State<MainPage>{
       appBar: AppBar(
         title: Text('GyPSie'),
         centerTitle: true,
+        actions: <Widget>[
+          new IconButton(icon: new Icon(Icons.refresh),
+          onPressed: () {
+            _buildBlueList();
+          }
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
@@ -104,6 +145,7 @@ class MainPageState extends State<MainPage>{
             SizedBox(height: 25.0),
             _buildButton(),
             SizedBox(height: 25.0),
+            _buildMenu(),
             Flex(
               direction: Axis.vertical,
               children: <Widget>[
