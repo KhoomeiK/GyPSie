@@ -27,6 +27,7 @@ class Algorithm {
       // display scanResults to user and wait for them to pick one (show as a popup with list maybe?)
       // once user selects a device
     });
+    print(devices);
     return devices;
   }
 
