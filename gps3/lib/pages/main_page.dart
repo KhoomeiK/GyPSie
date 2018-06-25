@@ -15,6 +15,16 @@ class MainPageState extends State<MainPage>{
   String origin1;
   String destination;
 
+  // Widget blueMenu = new PopupMenuButton<ScanSubscription<ScanResult>(
+  //   onSelected: (String band) {},
+  //     itemBuilder: (BuildContext context) => <PopupMenuEntry<WhyFarther>>[
+  //       const PopupMenuItem<String>(
+  //         value: WhyFarther.harder,
+  //         child: const Text('Working a lot harder')
+  //     ),
+  //   ],
+  // )
+
   Widget _buildForm(){
     return Form(
       key: formKey,

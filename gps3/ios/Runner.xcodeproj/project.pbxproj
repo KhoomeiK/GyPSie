@@ -193,7 +193,7 @@
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 7M6DNF82YU;
+						DevelopmentTeam = RHZ8VD3RMY;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -285,7 +285,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
-				"${PODS_ROOT}/../.symlinks/flutter/ios/Flutter.framework",
+				"${PODS_ROOT}/../.symlinks/flutter/ios-release/Flutter.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_blue/flutter_blue.framework",
 				"${BUILT_PRODUCTS_DIR}/location/location.framework",
@@ -453,7 +453,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7M6DNF82YU;
+				DEVELOPMENT_TEAM = RHZ8VD3RMY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -465,7 +465,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = 7M6DNF82YU;
+				PRODUCT_BUNDLE_IDENTIFIER = "-M6DNF82YU";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -481,7 +481,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7M6DNF82YU;
+				DEVELOPMENT_TEAM = RHZ8VD3RMY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -493,7 +493,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = 7M6DNF82YU;
+				PRODUCT_BUNDLE_IDENTIFIER = "-M6DNF82YU";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

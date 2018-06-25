@@ -21,7 +21,7 @@ class Algorithm {
 
   scan() { // connect to bluetooth device
     scanSubscription = blue.scan().listen((scanResult) {
-      print(scanResult.device.id);      
+      print(scanResult.device.id);     
       // display scanResults to user and wait for them to pick one (show as a popup with list maybe?)
       // once user selects a device
       if (scanResult.device.id.toString() == "627A2C77-148D-4B22-20DD-438840F17322")
