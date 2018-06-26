@@ -11,17 +11,18 @@ import 'main_page.dart';
 
 class Algorithm {
   String link; // api link
-  var resp, legs, steps, deviceConnection, scanSubscription; // navigation directions
+  var resp, legs, steps; // navigation directions
   FlutterBlue blue;
   List<BlueInfo> devices = [BlueInfo("Bluetooth Devices", "iD")];
-  BlueInfo xe;
+  StreamSubscription<ScanResult> scanSubscription; 
+  StreamSubscription<BluetoothDeviceState> deviceConnection;
+  BluetoothDevice band;
 
   Algorithm(){ // constructor
     link = "";
     resp = null;
     legs = null;
     steps = null;
-    deviceConnection = null;
     blue = FlutterBlue.instance;
   }
 
@@ -31,21 +32,39 @@ class Algorithm {
     if (d != null && devices.indexOf(d) == -1) // issue is either with indexOf()
       devices.add(d);
     });
-
   }
 
-  connect(BluetoothDevice band) {
-    print("connect try");
+  connect(BluetoothDevice band) async {
+    print("connect trying");
     deviceConnection = blue.connect(band).listen((s) { // stream connection to device
       print(s);
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
-        // open screen for user to input origin/destination
+        this.band = band;
+        findServ();
       }
     });
   }
 
-  disconnect() {
+  findServ() async {
+    List<BluetoothService> services = await band.discoverServices();
+    for(var i = 0; i < services.length-1; i++) {
+      print(services[i]);
+      transmit(services[i], i);
+    }
+  }
+
+  transmit(BluetoothService s, int x) async {
+    var characteristics = s.characteristics;
+    for(BluetoothCharacteristic c in characteristics) {
+      List<int> value = await band.readCharacteristic(c);
+      print(value);
+      await band.writeCharacteristic(c, [x]);
+    }
+    // Writes to a characteristic
+  }
+
+  disconnect() async {
     deviceConnection.cancel();
   }
 
