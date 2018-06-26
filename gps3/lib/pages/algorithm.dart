@@ -5,11 +5,16 @@ import 'package:http/http.dart' as http;
 import 'package:vibrate/vibrate.dart';
 import 'package:location/location.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'dart:async';
+
+import 'main_page.dart';
 
 class Algorithm {
   String link; // api link
   var resp, legs, steps, deviceConnection, scanSubscription; // navigation directions
   FlutterBlue blue;
+  List<BlueInfo> devices = [BlueInfo("Bluetooth Devices", "iD")];
+  BlueInfo xe;
 
   Algorithm(){ // constructor
     link = "";
@@ -20,18 +25,17 @@ class Algorithm {
     blue = FlutterBlue.instance;
   }
 
-  scan() { // connect to bluetooth device
-    List<List<String>> devices = [];
-    scanSubscription = blue.scan().listen((scanResult) {
-      devices.add([scanResult.device.name, scanResult.device.id.toString()]);
-      // display scanResults to user and wait for them to pick one (show as a popup with list maybe?)
-      // once user selects a device
+  scan() async { // connect to bluetooth devicer
+    scanSubscription = blue.scan().listen((scanResult){
+    BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
+    if (d != null && devices.indexOf(d) == -1) // issue is either with indexOf()
+      devices.add(d);
     });
-    print(devices);
-    return devices;
+
   }
 
-  connect(band) {
+  connect(BluetoothDevice band) {
+    print("connect try");
     deviceConnection = blue.connect(band).listen((s) { // stream connection to device
       print(s);
       if(s == BluetoothDeviceState.connected) { // if connected
@@ -62,7 +66,7 @@ class Algorithm {
     print(legs); // prints legs element to screen
     Vibrate.vibrate(); // vibrates as soon as Go button clicked
 
-    scan();
+    // scan();
     loop();
   }
 
