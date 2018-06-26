@@ -1,63 +1,67 @@
 import 'package:flutter/material.dart';
 import 'algorithm.dart';
+import 'dart:async';
+
+import 'package:flutter_blue/flutter_blue.dart';
+
+
 
 class MainPage extends StatefulWidget {
   State createState() => new MainPageState();
 }
 
-class MainPageState extends State<MainPage>{
+class BlueInfo {
+  BlueInfo({this.title, this.iD});
+  String title;
+  DeviceIdentifier iD;
+}
 
+class MainPageState extends State<MainPage>{ 
   Algorithm backEnd = new Algorithm();
   int index = 0;
+  //int index1 = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
   dynamic _borderRadius = new BorderRadius.circular(20.0);
   String origin1;
   String destination;
-  List<List<String>> blueName; 
+  List<BlueInfo> blueList;
+  int upToDate = 0;
 
-
-   Widget _blueMenu()
-  {
-    return PopupMenuButton<ScanSubscription<ScanResult>(
-      padding: EdgeInsets.all(20.0),
-      elevation: 8.0,
-      child: Text("Available Bluetooth Devices", style: TextStyle(color: Colors.white, fontSize: 20.0)),
-      shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-      onPressed: (){ 
-        _buildBlueList();
-        },
-      color: Colors.lightBlue,
-      splashColor: Colors.blue,
-    );
+   _convertFromFuture() async {
+    //List<List<dynamic>> c = await backEnd.scan();
+    List<BlueInfo> c = await backEnd.scan();
+    print(c);
+    _update(c);   
+  }
+  
+  _update(List<BlueInfo> c)  {
+    for (int i = 0; i < c.length; i++){
+      blueList.clear();
+      blueList.add(c[i]);
+    } 
   }
 
-
-  Widget _buildBlueList(){
-    blueName = backEnd.scan();
-    return ListView.builder(
-      itemCount: blueName.length,
-      itemBuilder: (context, i) {
-        return new Column(
-          children: <Widget>[
-            new RaisedButton(
-            padding: EdgeInsets.all(2.0),
-            elevation: 3.0,
-             child: Text(blueName[i][0], style: TextStyle(color: Colors.white, fontSize: 2.0)),
-             shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-             onPressed: (){ 
-             backEnd.connect(blueName[i][1]);
-             },
-             color: Colors.lightBlue,
-             splashColor: Colors.blue,
-             )
-          ],
-        );
-      }
-    );
+  void _submit() {
+   final form = formKey.currentState;
+    if(form.validate()){
+        form.save();
+        var x = backEnd.setPoints(origin1, destination);
+        print(x);
+      } 
   }
 
+  // _connect(BlueInfo lolz){
+  //   backEnd.connect(lolz.iD);
+  // }
 
+  // void _update(List<BlueInfo> a){
+  //   blueList.clear();
+
+  //   for (int i = 0; i < a.length; i++){
+  //     blueList.add(a[i]);
+  //   } 
+  // }
 
   Widget _buildForm(){
     return Form(
@@ -80,16 +84,6 @@ class MainPageState extends State<MainPage>{
     );
   }
 
-  void _submit() {
-   final form = formKey.currentState;
-    if(form.validate()){
-        form.save();
-        var x = backEnd.setPoints(origin1, destination);
-        print(x);
-      } 
-
-  }
-
   Widget _buildButton() {
     return RaisedButton(
       padding: EdgeInsets.all(20.0),
@@ -103,8 +97,6 @@ class MainPageState extends State<MainPage>{
       splashColor: Colors.blue,
     );
   }
-
-
 
   Widget _buildBottomNav(){
     return new BottomNavigationBar(
@@ -125,19 +117,31 @@ class MainPageState extends State<MainPage>{
   @override
   Widget build(BuildContext context) {
     print("App being built");
+    _convertFromFuture();
+   // _convertFromFuture();
     return new Scaffold(
       appBar: AppBar(
         title: Text('GyPSie'),
         centerTitle: true,
         actions: <Widget>[
-          new IconButton(icon: new Icon(Icons.refresh),
-          onPressed: () {
-            _buildBlueList();
-          }
-          )
-        ],
-      ),
-      body: Container(
+        new PopupMenuButton<BlueInfo>(
+          elevation: 3.2,
+          initialValue: blueList[0],
+          // onSelected:  _connect,
+          onCanceled: _convertFromFuture(),
+          itemBuilder: (BuildContext context) {
+           return blueList.map((BlueInfo lol) {
+             return new PopupMenuItem<BlueInfo>(
+              value: lol,
+              child: new Text(lol.title),
+           ); 
+        }).toList();
+      }
+        )]
+        
+      ) ,
+      body:
+      Container(
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
@@ -145,7 +149,6 @@ class MainPageState extends State<MainPage>{
             SizedBox(height: 25.0),
             _buildButton(),
             SizedBox(height: 25.0),
-            _buildMenu(),
             Flex(
               direction: Axis.vertical,
               children: <Widget>[
@@ -159,4 +162,3 @@ class MainPageState extends State<MainPage>{
     );
   }
 }
-
