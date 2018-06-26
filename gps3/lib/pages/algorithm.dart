@@ -48,20 +48,35 @@ class Algorithm {
   }
 
   listServ() async {
+    print("listServ");
     List<BluetoothService> services = await band.discoverServices();
     char = services[0].characteristics[0];
-    for(var i = 0; i < services.length-1; i++) {
-      print(services[i]);
-      print(services[i].characteristics);
-      print(services[i].characteristics[0]);
-      transmit(i);
-    }
+    // for(var i = 0; i < services.length-1; i++) {
+    //   print(services[i]);
+    //   print(services[i].characteristics);
+      // print(services[i].characteristics[0]);
+    // }
+    await transmit(5);
   }
 
   transmit(num x) async {
+    print("transmit");
     List<int> value = await band.readCharacteristic(char);
+    print("value og");
     print(value);
-    await band.writeCharacteristic(char, [100 ~/ x]);
+
+    var r = await band.writeCharacteristic(char, [100 ~/ x]);
+    print(r);
+
+    value = await band.readCharacteristic(char);
+    print("value new");
+    print(value);
+
+    print(char.descriptors);
+    for (BluetoothDescriptor d in char.descriptors)
+      print(await band.readDescriptor(d));
+    await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
+    print(await band.readDescriptor(char.descriptors[0]));
   }
 
   disconnect() async {
