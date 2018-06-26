@@ -17,6 +17,7 @@ class Algorithm {
   StreamSubscription<ScanResult> scanSubscription; 
   StreamSubscription<BluetoothDeviceState> deviceConnection;
   BluetoothDevice band;
+  BluetoothCharacteristic char;
 
   Algorithm(){ // constructor
     link = "";
@@ -41,27 +42,26 @@ class Algorithm {
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
         this.band = band;
-        findServ();
+        listServ();
       }
     });
   }
 
-  findServ() async {
+  listServ() async {
     List<BluetoothService> services = await band.discoverServices();
+    char = services[0].characteristics[0];
     for(var i = 0; i < services.length-1; i++) {
       print(services[i]);
-      transmit(services[i], i);
+      print(services[i].characteristics);
+      print(services[i].characteristics[0]);
+      transmit(i);
     }
   }
 
-  transmit(BluetoothService s, int x) async {
-    var characteristics = s.characteristics;
-    for(BluetoothCharacteristic c in characteristics) {
-      List<int> value = await band.readCharacteristic(c);
-      print(value);
-      await band.writeCharacteristic(c, [x]);
-    }
-    // Writes to a characteristic
+  transmit(num x) async {
+    List<int> value = await band.readCharacteristic(char);
+    print(value);
+    await band.writeCharacteristic(char, [100 ~/ x]);
   }
 
   disconnect() async {
@@ -85,7 +85,6 @@ class Algorithm {
     print(legs); // prints legs element to screen
     Vibrate.vibrate(); // vibrates as soon as Go button clicked
 
-    // scan();
     loop();
   }
 
@@ -104,11 +103,10 @@ class Algorithm {
     // var x = dist(legs["end_location"]["lat"], legs["end_location"]["lng"]);
 
     while(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]) > 15) { // while not arrived at final destination
-      var dis = await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]); // distance between cur and next waypoint
+      num dis = await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]); // distance between cur and next waypoint
       print(dis);
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
-        vib(dis);
-        Vibrate.vibrate();
+        transmit(dis);
       }
       else if (dis < 10) { // once past the waypoint
         while (await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]) < 10) {
@@ -129,11 +127,6 @@ class Algorithm {
 
   getLoc() async { // gets current location
     return await Location().getLocation;
-  }
-
-  vib(d) {
-    d = 100/d; // number of times to vibrate per second
-    // deviceConnection write d to bluetooth stream
   }
 
   toRadians(deg) { // convert degree to radians for dist function
