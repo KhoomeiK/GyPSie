@@ -113,20 +113,19 @@ class MainPageState extends State<MainPage>{
   //   );
   // }
 
-
   Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
     return new PopupMenuButton<BlueInfo>(
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
+      elevation: 3.2,
+      initialValue: devices[0],
+      onSelected: _connect,
+      itemBuilder: (BuildContext context) {
+        return devices.map((BlueInfo b) {
+          return new PopupMenuItem<BlueInfo>(
+            value: b,
+            child: new Text(b.title)
+          ); 
+        }).toList();
+    });
   }
 
   Widget _buildButton2() {
@@ -200,4 +199,3 @@ class MainPageState extends State<MainPage>{
       //   }).toList();
       // }
 }
-
