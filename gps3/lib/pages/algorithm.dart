@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:vibrate/vibrate.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
 
@@ -18,6 +18,7 @@ class Algorithm {
   StreamSubscription<BluetoothDeviceState> deviceConnection;
   BluetoothDevice band;
   BluetoothCharacteristic char;
+  String _bTState = 'disconnected';
 
   Algorithm(){ // constructor
     link = "";
@@ -26,6 +27,7 @@ class Algorithm {
     steps = null;
     blue = FlutterBlue.instance;
   }
+  
 
   scan() async { // connect to bluetooth devicer
     scanSubscription = blue.scan().listen((scanResult){
@@ -35,12 +37,15 @@ class Algorithm {
     });
   }
 
+  
+
   connect(BluetoothDevice band) async {
     print("connect trying");
     deviceConnection = blue.connect(band).listen((s) { // stream connection to device
       print(s);
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
+        _bTState = 'connected';
         this.band = band;
         listServ();
       }
@@ -81,6 +86,12 @@ class Algorithm {
 
   disconnect() async {
     deviceConnection.cancel();
+    _bTState = 'disconnected';
+  }
+
+  getIconState()
+  {
+    return _bTState ;
   }
 
   setPoints(origin, dest) async { // receives origin and destination from textbox and 
@@ -141,7 +152,7 @@ class Algorithm {
   }
 
   getLoc() async { // gets current location
-    return await Location().getLocation;
+    return await loc.Location().getLocation;
   }
 
   toRadians(deg) { // convert degree to radians for dist function
