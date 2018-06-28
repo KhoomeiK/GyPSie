@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pulse</title>
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Subscribe for a limited time discount on our newly developed haptic GPS!">
+    <meta property="og:image" content="">
+    <link rel="shortcut icon" href="img/logo.png" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400" rel="stylesheet">
+    <link rel="stylesheet" href="style/AllTemplates.min.css">
+
+    <style>
+      #my{
+        zoom: 110%;
+      }
+
+      .launchaco-promo {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        cursor: pointer;
+        width: 0;
+        height: 0;
+        z-index: 999999;
+      }
+
+      .launchaco-promo__active {
+        width: initial;
+        height: initial;
+      }
+
+      .launchaco-promo-speechbubble {
+        font-family: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+        position: absolute;
+        left: 50px;
+        top: -11px;
+        padding: 9px;
+        color: white;
+        border-radius: 3px;
+        background: linear-gradient(#227ef7, #1290fc);
+        font-size: 14px;
+        font-weight: 600;
+        width: 93px;
+        box-sizing: border-box;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .15s ease-in-out;
+      }
+
+      .launchaco-promo__active:hover .launchaco-promo-speechbubble {
+        opacity: 1;
+      }
+
+      .launchaco-promo svg {
+        transition: all .3s ease-in-out;
+        opacity: 0;
+      }
+
+      .launchaco-promo__active svg {
+        opacity: 1;
+      }
+
+      .launchaco-promo-speechbubble:before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        transform: rotate(45deg);
+        left: -4px;
+        bottom: 10px;
+        border-radius: 3px;
+        background: #1290fc;
+        z-index: 2;
+        position: absolute
+      }
+
+      .launchaco-promo__active .launchaco-promo-speechbubble__animate {
+        animation: popinpopup 3s linear forwards 0.1s;
+      }
+
+      @keyframes popinpopup {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, 3px, 0)
+        }
+        7%,
+        93% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0)
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(0, -4px, 0)
+        }
+      }
+
+      .launchaco-promo-animate:hover {
+        opacity: 1 !important;
+      }
+    </style>
+    <style>
+      .custom-color-0da6361c-0887-5a24-06be-162de3ccd45d {
+        background-color: #2410F4
+      }
+
+      .custom-color-0da6361c-0887-5a24-06be-162de3ccd45d .primary-color {
+        color: #FFFFFF
+      }
+
+      .custom-color-0da6361c-0887-5a24-06be-162de3ccd45d .secondary-color {
+        color: transparent;
+        background-image: linear-gradient(#FFFFFF, #999191);
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+
+      .custom-color-0da6361c-0887-5a24-06be-162de3ccd45d .accent-bg {
+        background-color: #1BB021
+      }
+
+      .custom-color-0da6361c-0887-5a24-06be-162de3ccd45d .secondary-bg {
+        background-color: #000000
+      }
+
+      .custom-color-0da6361c-0887-5a24-06be-162de3ccd45d .svg-fill {
+        fill: #FFFFFF
+      }
+    </style>
+  </head>
+
+  <body class="font-modern">
+    <div class="custom-color-0da6361c-0887-5a24-06be-162de3ccd45d background">
+      <div class="bg">
+        <div class="bg-image" style="background-image: url(&quot;img/download.jpg&quot;);"></div>
+      </div>
+      <header class="header">
+        <div class="container-lrg">
+          <div class="flex col-12 spread">
+            <a class="logo launchaco-builder-hoverable logo__white">
+              <img src="img/download-1.png" alt="Pulse Navigation">
+            </a>
+            <a href="mailto:pulse.navigation@gmail.com" class="nav-link secondary-color mr0">pulse.navigation@gmail.com</a>
+          </div>
+        </div>
+      </header>
+      <section class="section">
+        <div class="container-lrg flex">
+          <div class="col-6 flex flex-column center-vertical mobile-text-center mb40">
+            <h1 class="heading-lrg primary-color launchaco-builder-hoverable">Navigation. No screen required.</h1>
+            <h2 class="subheading secondary-color mt20 launchaco-builder-hoverable">Subscribe now for a limited time discount on our newly developed haptic GPS.</h2>
+            <div class="mt40">
+              <form action="https://launchaco.us18.list-manage.com/subscribe/post?u=221ca3c413489669987033f4f&amp;amp;id=2e66c4ef3f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate"
+                class="container-sml mailchimp flex mb20">
+                <input type="email" value="" name="EMAIL" id="mce-EMAIL" placeholder="Your Email Address" required="required" class="mailchimp-input mobile-text-center">
+                <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                  <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabindex="-1" value="">
+                </div>
+                <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="white-color button no-max-width accent-bg button__white" value="Subscribe!">
+              </form>
+            </div>
+          </div>
+          <div class="col-6 flex center-horizontal center-vertical">
+            <div class="launchaco-builder-hoverable">
+              <div class="">
+                <img src="img/download.png" alt="Pulse Band" class="custom-img">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+
+  <script>
+    document.body.style.zoom="110%";
+
+    window.onscroll = function()
+    {
+      showAd()
+    }
+
+    function showAd()
+    {
+      var scrollBarPosition = window.pageYOffset | document.body.scrollTop;
+
+      // At specifiv position do what you want
+      if (scrollBarPosition > 300)
+      {
+        document.getElementById("visual-dreamer").className = "launchaco-promo launchaco-promo__active";
+        window.onscroll = function() {};
+      }
+    }
+  </script>
+
+</html>
