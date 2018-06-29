@@ -1,12 +1,11 @@
 import 'dart:math' as Math;
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:vibrate/vibrate.dart';
 import 'package:location/location.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'dart:async';
-
 import 'main_page.dart';
 
 class Algorithm {
