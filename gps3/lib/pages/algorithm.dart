@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:vibrate/vibrate.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_blue/flutter_blue.dart';
+// import 'package:flutter_bluetooth_classic/flutter_bluetooth_classic.dart';
 import 'main_page.dart';
 
 class Algorithm {
@@ -26,21 +27,23 @@ class Algorithm {
     steps = null;
     blue = FlutterBlue.instance;
   }
-  
 
-  scan() async { // connect to bluetooth devicer
+  scan() { // connect to bluetooth device
+    print("scanning to start");
     scanSubscription = blue.scan().listen((scanResult){
-    BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
-    if (d != null && devices.indexOf(d) == -1) // issue is either with indexOf()
-      devices.add(d);
+      print("scanning");
+      BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
+      if (d != null && devices.indexOf(d) == -1) { // issue is with indexOf()
+        print(d);
+        devices.add(d);
+      }
     });
   }
 
-  
-
   connect(BluetoothDevice band) async {
-    print("connect trying");
+    print("connect to start");
     deviceConnection = blue.connect(band).listen((s) { // stream connection to device
+      print("connecting");
       print(s);
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
@@ -55,32 +58,34 @@ class Algorithm {
     print("listServ");
     List<BluetoothService> services = await band.discoverServices();
     char = services[0].characteristics[0];
-    // for(var i = 0; i < services.length-1; i++) {
-    //   print(services[i]);
-    //   print(services[i].characteristics);
-      // print(services[i].characteristics[0]);
-    // }
-    await transmit(5);
+    print("service/characteristic info");
+    for(var i = 0; i < services.length-1; i++) { // ble has 1 service with 2 characteristics
+      print(services[i]);
+      print(services[i].characteristics);
+      print(services[i].characteristics[0]);
+    }
+    transmit(5);
   }
 
   transmit(num x) async {
     print("transmit");
+
+    // print(char.descriptors);
+    // for (BluetoothDescriptor d in char.descriptors)
+    //   print(await band.readDescriptor(d));
+    // await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
+    // print(await band.readDescriptor(char.descriptors[0]));
+
     List<int> value = await band.readCharacteristic(char);
     print("value og");
     print(value);
 
-    var r = await band.writeCharacteristic(char, [100 ~/ x]);
+    var r = await band.writeCharacteristic(char, [5 * x]); // error 
     print(r);
 
     value = await band.readCharacteristic(char);
     print("value new");
     print(value);
-
-    print(char.descriptors);
-    for (BluetoothDescriptor d in char.descriptors)
-      print(await band.readDescriptor(d));
-    await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
-    print(await band.readDescriptor(char.descriptors[0]));
   }
 
   disconnect() async {
@@ -135,7 +140,7 @@ class Algorithm {
       }
       else if (dis < 10) { // once past the waypoint
         while (await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]) < 10) {
-          Vibrate.vibrate();
+          transmit(0);
         }
         i++; // go to next step 
       }
