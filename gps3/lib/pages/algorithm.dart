@@ -8,6 +8,7 @@ import 'package:location/location.dart' as loc;
 import 'package:flutter_blue/flutter_blue.dart';
 // import 'package:flutter_bluetooth_classic/flutter_bluetooth_classic.dart';
 import 'main_page.dart';
+import 'globals.dart' as globals;
 
 class Algorithm {
   String link; // api link
@@ -31,12 +32,10 @@ class Algorithm {
   scan() { // connect to bluetooth device
     print("scanning to start");
     scanSubscription = blue.scan().listen((scanResult){
-      print("scanning");
       BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
-      if (d != null && devices.indexOf(d) == -1) { // issue is with indexOf()
-        print(d);
-        devices.add(d);
-      }
+
+      if (globals.devices.indexOf(d)==-1)
+        globals.devices.add(d);
     });
   }
 
