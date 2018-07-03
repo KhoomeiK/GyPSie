@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'algorithm.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:map_view/map_view.dart';
-
+import 'main_page2.dart';
 import 'settings_page.dart';
+import 'package:flutter/services.dart';
+import 'globals.dart' as globals;
+import 'maps_page.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -32,7 +35,7 @@ class BlueInfo {
 }
 
 class MainPageState extends State<MainPage>{ 
-  Algorithm backEnd = new Algorithm();
+  Algorithm _backEnd = new Algorithm();
   int index = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
@@ -45,25 +48,23 @@ class MainPageState extends State<MainPage>{
 
 
   _update() async {
-    await backEnd.scan();
-    devices = backEnd.devices;
-    print(backEnd.devices);
-    return devices;
+    await _backEnd.scan();
+    return globals.devices;
   }
 
   _connect(BlueInfo device){
-    backEnd.connect(device.toDevice());
+    _backEnd.connect(device.toDevice());
   }
 
   _disconnect() {
-    backEnd.disconnect();
+    _backEnd.disconnect();
   }
 
   void _submit() {
    final form = formKey.currentState;
     if(form.validate()){
         form.save();
-        backEnd.setPoints(origin1, destination);
+        _backEnd.setPoints(origin1, destination);
       }
   }
 
@@ -92,10 +93,12 @@ class MainPageState extends State<MainPage>{
     return RaisedButton(
       padding: EdgeInsets.all(20.0),
       elevation: 8.0,
-      child: Text("Go!", style: TextStyle(color: Colors.white, fontSize: 20.0)),
+      child: Text("Go!", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Rajdhani", color: Colors.white, fontSize: 20.0)),
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
       onPressed: (){ 
         _submit();
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MapsPage()));
+
       },
       color: Colors.lightBlue,
       splashColor: Colors.blue,
@@ -104,25 +107,26 @@ class MainPageState extends State<MainPage>{
 
   Widget _buildBottomNav(){
     return new BottomNavigationBar(
-      currentIndex: index,
+      currentIndex: 1,
       onTap: (index) {
-          setState(() {
-            this.index = index;
-          }
-          );
+        this.index = index;
+            if (index ==1)
+            {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage2()));
+            }
       },
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.home),
-          title: new Text("Home"),
+          icon: new Icon(Icons.access_time),
+          title: new Text("Recents"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.bluetooth_disabled),
-          title: new Text("Disconnect"),
+          icon: new Icon(Icons.accessibility),
+          title: new Text("Device", style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.settings),
-          title: new Text("Settings"),
+          icon: new Icon(Icons.account_box),
+          title: new Text("Profile"),
         )
       ],
        
@@ -137,52 +141,52 @@ class MainPageState extends State<MainPage>{
 
 
 
-  Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
-    if (backEnd.getIconState()=='connected'){
-    return new PopupMenuButton<BlueInfo>(
-                icon: Icon(Icons.bluetooth_connected),
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
-    }if (backEnd.getIconState()=='disconnected'){
-    return new PopupMenuButton<BlueInfo>(
-                icon: Icon(Icons.bluetooth),
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
-    }
-    else{
-    return new PopupMenuButton<BlueInfo>(
-                icon: Icon(Icons.bluetooth_searching),
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
-    }
-  }
+  // Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
+  //   if (_backEnd.getIconState()=='connected'){
+  //   return new PopupMenuButton<BlueInfo>(
+  //               icon: Icon(Icons.bluetooth_connected),
+  //               elevation: 3.2,
+  //               initialValue: devices[0],
+  //               onSelected: _connect,
+  //               itemBuilder: (BuildContext context) {
+  //                 return devices.map((BlueInfo b) {
+  //                   return new PopupMenuItem<BlueInfo>(
+  //                     value: b,
+  //                     child: new Text(b.title)
+  //                   ); 
+  //                 }).toList();
+  //             });
+  //   }if (_backEnd.getIconState()=='disconnected'){
+  //   return new PopupMenuButton<BlueInfo>(
+  //               icon: Icon(Icons.bluetooth),
+  //               elevation: 3.2,
+  //               initialValue: devices[0],
+  //               onSelected: _connect,
+  //               itemBuilder: (BuildContext context) {
+  //                 return devices.map((BlueInfo b) {
+  //                   return new PopupMenuItem<BlueInfo>(
+  //                     value: b,
+  //                     child: new Text(b.title)
+  //                   ); 
+  //                 }).toList();
+  //             });
+  //   }
+  //   else{
+  //   return new PopupMenuButton<BlueInfo>(
+  //               icon: Icon(Icons.bluetooth_searching),
+  //               elevation: 3.2,
+  //               initialValue: devices[0],
+  //               onSelected: _connect,
+  //               itemBuilder: (BuildContext context) {
+  //                 return devices.map((BlueInfo b) {
+  //                   return new PopupMenuItem<BlueInfo>(
+  //                     value: b,
+  //                     child: new Text(b.title)
+  //                   ); 
+  //                 }).toList();
+  //             });
+  //   }
+  // }
 
   // Widget _buildButton2() {
   //   return RaisedButton(
@@ -205,20 +209,18 @@ class MainPageState extends State<MainPage>{
         DrawerHeader(
           child: Row(
             children: <Widget>[
-              Image.asset('/Users/ryanwang/Documents/GyPSie/gps3/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png'),
+              Image.asset('assets/Logo.png', width: 70.0, height:70.0),
               SizedBox(width: 25.0),
-              Text("Options", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400))
+              Text("Hi, Ryan", style: TextStyle(fontFamily: "Rajdhani", fontSize: 20.0, fontWeight: FontWeight.bold))
             ],
           ),
         ),
-        ListTile(title: Text("Vibration Level"), onTap: () {}), 
-        ListTile(title: Text("Haptic Patterns"), onTap: () {}),
-        ListTile(title: Text("Rerun Tutorial"), onTap: () {}),
-        ListTile(title: Text("Settings"), onTap: () {}),
-        ListTile(title: Text("Help"), onTap: () {}),
-        ListTile(title: Text("About Us"), onTap: (){
-          //navigate to settings page
-        }),
+        ListTile(title: Text("Vibrational Levels", style: TextStyle(fontFamily: "Rajdhani"))),
+        ListTile(title: Text("Haptic Patterns", style: TextStyle(fontFamily: "Rajdhani"))),
+        ListTile(title: Text("Rerun Tutorial", style: TextStyle(fontFamily: "Rajdhani"))),
+        ListTile(title: Text("Settings", style: TextStyle(fontFamily: "Rajdhani")), onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));}),
+        ListTile(title: Text("Help", style: TextStyle(fontFamily: "Rajdhani"))),
+        ListTile(title: Text("About Us", style: TextStyle(fontFamily: "Rajdhani"))),
       ],)
     );
   }
@@ -226,12 +228,17 @@ class MainPageState extends State<MainPage>{
 
   @override
   Widget build(BuildContext context) {
-    print("App being built");
     //showMap();
+    SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+  _update();
     return new Scaffold(
       
       appBar: AppBar(
-        title: new Padding (child: new Text ("Pulse"),
+        title: new Padding (child:new Text("Navigation", style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 25.0)),
+
         padding:const EdgeInsets.only(left: 0.0) ),
         actions: <Widget>[
 
@@ -242,22 +249,10 @@ class MainPageState extends State<MainPage>{
               child: Icon(Icons.battery_full),
             )
           ),          
-
-          new FutureBuilder(
-          future: _update(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return new Text('loading...');
-              default:
-                if (snapshot.hasError)
-                  return new Text('Error: ${snapshot.error}');
-                else
-                  return createListView(context, snapshot);
-              }
-            } 
-          ),
+          SizedBox(width: 9.0),
+          new Icon(Icons.bluetooth),
+          SizedBox(width: 17.0),
+          
         ],
       ),
       body:
@@ -282,11 +277,8 @@ class MainPageState extends State<MainPage>{
 
       drawer: _buildDrawer(),
       bottomNavigationBar:
-              FloatingActionButton(
-                child: new Icon(Icons.account_circle),
-               onPressed: () {},
-             ),
-      
+      _buildBottomNav(),
+            
     );  
 }
 
