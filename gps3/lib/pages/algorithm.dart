@@ -127,6 +127,11 @@ class Algorithm {
       globals.markers.add(new Marker(
         i.toString(), "Waypoint", steps[i]["start_location"]["lat"], steps[i]["start_location"]["lng"], color: Colors.cyan
       ));
+
+      if (i == steps.length - 1)
+        globals.markers.add(new Marker(
+          i.toString(), "Waypoint", steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"], color: Colors.red
+        ));
     }
 
     loop();
