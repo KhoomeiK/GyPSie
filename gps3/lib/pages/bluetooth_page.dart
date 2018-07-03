@@ -183,7 +183,6 @@ initState() {
         return new IconButton(
           icon: new Icon(Icons.refresh),
           onPressed: () {
-            globals.devices.clear();
             update();
             Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothPage()));
           },
@@ -317,9 +316,6 @@ _title(index){
                   }
               } 
           ),
-      
-            
-    
 
       drawer: _buildDrawer(),
       bottomNavigationBar:
@@ -339,11 +335,10 @@ _title(index){
 }
 
 void __showSnackBar(){
- if (globals.isConnected==false){
   _scaffoldstate.currentState.showSnackBar(new SnackBar(
     content:new Text("Disconnected!"),
   ));
-   }
+   
 
 }
 

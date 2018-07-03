@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
 import 'algorithm.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
 import 'main_page2.dart';
 import 'settings_page.dart';
 import 'package:flutter/services.dart';
-import 'globals.dart' as globals;
 import 'maps_page.dart';
+import 'globals.dart' as globals;
 
 
 class MainPage extends StatefulWidget {

@@ -24,7 +24,6 @@ class _MapsPageState extends State<MapsPage> {
   List<Marker> markers = <Marker>[
     new Marker("1", "BSR Restuarant", 28.421364, 77.333804,
         color: Colors.amber),
-    
   ];
 
   _getMarkers(){
