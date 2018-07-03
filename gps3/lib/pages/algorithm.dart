@@ -106,8 +106,8 @@ class Algorithm {
     return _bTState ;
   }
 
-  setPoints(origin, dest) async { // receives origin and destination from textbox and 
-    if (origin == "Current Location") { // uses current location as origin
+  setPoints(String origin, String dest) async { // receives origin and destination from textbox and 
+    if (origin.trim().toUpperCase() == "CURRENT LOCATION") { // uses current location as origin
       var loc = await getLoc();
       origin = loc["latitude"].toString() + "," + loc["longitude"].toString();
     }
