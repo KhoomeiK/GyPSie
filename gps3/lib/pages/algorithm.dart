@@ -14,8 +14,8 @@ import 'globals.dart' as globals;
 class Algorithm {
   String link; // api link
   var resp, legs, steps; // navigation directions
-  FlutterBlue blue;
-  List<BlueInfo> devices = [BlueInfo("Bluetooth Devices", "iD")];
+  FlutterBlue  blue = FlutterBlue.instance;
+  List<BlueInfo> devices = [];
   StreamSubscription<ScanResult> scanSubscription; 
   StreamSubscription<BluetoothDeviceState> deviceConnection;
   BluetoothDevice band;
@@ -27,32 +27,40 @@ class Algorithm {
     resp = null;
     legs = null;
     steps = null;
-    blue = FlutterBlue.instance;
+
   }
 
   scan() { // connect to bluetooth device
     print("scanning to start");
     scanSubscription = blue.scan().listen((scanResult){
-      BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
+    BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
 
-      if (globals.devices.indexOf(d)==-1)
-        globals.devices.add(d);
-    });
+    if (globals.devices.indexOf(d)==-1)
+      globals.devices.add(d);});
   }
+
+  getDevices(){
+    return globals.devices;
+  }
+  
+
+  // getDevices() async{
+  //   await scan();
+  //   return devices;
+  // }
 
   connect(BluetoothDevice band) async {
     print("connect to start");
     deviceConnection = blue.connect(band).listen((s) { // stream connection to device
-      print("connecting");
-      print(s);
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
-        _bTState = 'connected';
+        globals.isConnected==true;
         this.band = band;
         listServ();
       }
     });
   }
+
 
   listServ() async {
     print("listServ");
@@ -90,7 +98,7 @@ class Algorithm {
 
   disconnect() async {
     deviceConnection.cancel();
-    _bTState = 'disconnected';
+    globals.isConnected==false;
   }
 
   getIconState()
@@ -112,7 +120,7 @@ class Algorithm {
     await getData(); // sets json from api request
     legs = resp["routes"][0]["legs"][0]; // legs element of json
     steps = legs["steps"]; // steps element of legs
-    print(legs); // prints legs element to screen
+    // print(legs); // prints legs element to screen
     Vibrate.vibrate(); // vibrates as soon as Go button clicked
 
     for(int i = 0; i < steps.length; i++) {
