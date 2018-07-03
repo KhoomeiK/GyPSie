@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:vibrate/vibrate.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_blue/flutter_blue.dart';
-// import 'package:flutter_bluetooth_classic/flutter_bluetooth_classic.dart';
+import 'package:flutter/material.dart';
+import 'package:map_view/map_view.dart';
 import 'main_page.dart';
 import 'globals.dart' as globals;
 
@@ -114,9 +115,14 @@ class Algorithm {
     print(legs); // prints legs element to screen
     Vibrate.vibrate(); // vibrates as soon as Go button clicked
 
+    for(int i = 0; i < steps.length; i++) {
+      globals.markers.add(new Marker(
+        i.toString(), "Waypoint", steps[i]["start_location"]["lat"], steps[i]["start_location"]["lng"], color: Colors.cyan
+      ));
+    }
+
     loop();
   }
-
 
   loop() async {
     for (var step in steps) { // prints maneuver for each step
