@@ -130,7 +130,7 @@ class Algorithm {
 
       if (i == steps.length - 1)
         globals.markers.add(new Marker(
-          i.toString(), "Waypoint", steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"], color: Colors.red
+          i.toString(), dest, steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"], color: Colors.red
         ));
     }
 
