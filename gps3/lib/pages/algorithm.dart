@@ -27,7 +27,6 @@ class Algorithm {
     resp = null;
     legs = null;
     steps = null;
-
   }
 
   scan() { // connect to bluetooth device
@@ -36,31 +35,21 @@ class Algorithm {
     BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
 
     if (globals.devices.indexOf(d)==-1)
-      globals.devices.add(d);});
+      globals.devices.add(d);
+    });
   }
-
-  getDevices(){
-    return globals.devices;
-  }
-  
-
-  // getDevices() async{
-  //   await scan();
-  //   return devices;
-  // }
 
   connect(BluetoothDevice band) async {
     print("connect to start");
     deviceConnection = blue.connect(band).listen((s) { // stream connection to device
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
-        globals.isConnected==true;
+        globals.isConnected = true;
         this.band = band;
         listServ();
       }
     });
   }
-
 
   listServ() async {
     print("listServ");
@@ -101,12 +90,8 @@ class Algorithm {
     globals.isConnected==false;
   }
 
-  getIconState()
-  {
-    return _bTState ;
-  }
-
   setPoints(String origin, String dest) async { // receives origin and destination from textbox and 
+    globals.canceled = false;
     if (origin.trim().toUpperCase() == "CURRENT LOCATION") { // uses current location as origin
       var loc = await getLoc();
       origin = loc["latitude"].toString() + "," + loc["longitude"].toString();
@@ -153,6 +138,9 @@ class Algorithm {
     while(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]) > 15) { // while not arrived at final destination
       num dis = await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]); // distance between cur and next waypoint
       print(dis);
+      if (globals.canceled)
+        return "You have canceled your trip";
+        
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
         transmit(dis);
       }
