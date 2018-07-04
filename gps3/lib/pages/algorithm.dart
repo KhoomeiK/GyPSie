@@ -136,11 +136,12 @@ class Algorithm {
     // var x = dist(legs["end_location"]["lat"], legs["end_location"]["lng"]);
 
     while(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]) > 15) { // while not arrived at final destination
+      globals.next = steps[i]["html_instructions"];
       num dis = await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]); // distance between cur and next waypoint
       print(dis);
       if (globals.canceled)
         return "You have canceled your trip";
-        
+
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
         transmit(dis);
       }
