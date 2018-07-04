@@ -92,6 +92,8 @@ class Algorithm {
 
   setPoints(String origin, String dest) async { // receives origin and destination from textbox and 
     globals.canceled = false;
+    globals.dest = dest;
+
     if (origin.trim().toUpperCase() == "CURRENT LOCATION") { // uses current location as origin
       var loc = await getLoc();
       origin = loc["latitude"].toString() + "," + loc["longitude"].toString();

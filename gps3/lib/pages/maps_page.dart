@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
+import 'globals.dart' as globals;
 
 var api_key = "AIzaSyDrHKl8IxB4cGXIoELXQOzzZwiH1xtsRf4";
 void main() {
@@ -20,16 +21,17 @@ class _MapsPageState extends State<MapsPage> {
   CameraPosition cameraPosition;
   var staticMapProvider = new StaticMapProvider(api_key);
   Uri staticMapUri;
+  final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
 
-  List<Marker> markers = <Marker>[
-    new Marker("1", "BSR Restuarant", 28.421364, 77.333804,
-        color: Colors.amber),
-  ];
+  // List<Marker> markers = <Marker>[
+  //   new Marker("1", "BSR Restuarant", 28.421364, 77.333804,
+  //       color: Colors.amber),
+  // ];
 
-  _getMarkers(){
-    new Marker("2", "Flutter Institute", 28.418684, 77.340417,
-        color: Colors.purple);
-  }
+  // _getMarkers(){
+  //   new Marker("2", "Flutter Institute", 28.418684, 77.340417,
+  //       color: Colors.purple);
+  // }
 
   showMap() {
     mapView.show(new MapOptions(
@@ -37,17 +39,41 @@ class _MapsPageState extends State<MapsPage> {
         initialCameraPosition:
             new CameraPosition(new Location(37.7749, -122.4194), 15.0),
         showUserLocation: true,
-        title: "Recent Location"));
-    mapView.setMarkers(markers);
+        title: "to "+ globals.dest),
+        toolbarActions: [ new ToolbarAction("End Route", 2)],
+        );
+    mapView.setMarkers(globals.markers);
     mapView.zoomToFit(padding: 100);
+
+    mapView.onToolbarAction.listen((identifier) {
+      switch (identifier) {
+        case 2:
+          globals.canceled=true;
+          mapView.dismiss();
+          _showSnackBar();
+          break;
+      }
+    });
 
     mapView.onMapTapped.listen((_) {
       setState(() {
-        mapView.setMarkers(markers);
+        mapView.setMarkers(globals.markers);
         mapView.zoomToFit(padding: 100);
-      });
+      }
+
+      
+      );
     });
   }
+
+  void _showSnackBar(){
+ if (globals.isConnected==true){
+  _scaffoldstate.currentState.showSnackBar(new SnackBar(
+    content:new Text("Connected!"),
+  ));
+   }
+
+}
 
   @override
   void initState() {
@@ -57,20 +83,20 @@ class _MapsPageState extends State<MapsPage> {
         new CameraPosition(new Location(37.7749, -122.4194), 2.0);
     staticMapUri = staticMapProvider.getStaticUri(
         new Location(37.7749, -122.4194), 12,
-        height: 400, width: 900, mapType: StaticMapViewType.roadmap);
+        height: 1300, width: 900, mapType: StaticMapViewType.roadmap);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text("Flutter Google maps"),
+        title: Text("Pulse Directions"),
       ),
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           new Container(
-            height: 300.0,
+            height: 564.0,
             child: new Stack(
               children: <Widget>[
                 new Center(
@@ -94,14 +120,9 @@ class _MapsPageState extends State<MapsPage> {
           new Container(
             padding: new EdgeInsets.only(top: 10.0),
             child: new Text(
-              "Tap the map to interact",
-              style: new TextStyle(fontWeight: FontWeight.bold),
+              "TAP THE MAP TO VIEW WAYPOINTS",
+              style: new TextStyle(fontFamily: "Rajdhani", fontWeight: FontWeight.bold),
             ),
-          ),
-          new Container(
-            padding: new EdgeInsets.only(top: 25.0),
-            child: new Text(
-                "Camera Position: \n\nLat: ${cameraPosition.center.latitude}\n\nLng:${cameraPosition.center.longitude}\n\nZoom: ${cameraPosition.zoom}"),
           ),
         ],
       ),

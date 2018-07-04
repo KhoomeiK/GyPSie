@@ -6,6 +6,7 @@ import 'main_page.dart';
 import 'package:flutter/services.dart';
 import 'settings_page.dart';
 import 'bluetooth_page.dart';
+import 'globals.dart' as globals;
 
 
 class MainPage2 extends StatefulWidget {
@@ -137,7 +138,7 @@ class MainPage2State extends State<MainPage2>{
 
 
   Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
-    if (_backEnd.getIconState()=='connected'){
+    if (globals.isConnected==true){
     return new PopupMenuButton<BlueInfo>(
                 icon: Icon(Icons.bluetooth_connected),
                 elevation: 3.2,
@@ -151,7 +152,7 @@ class MainPage2State extends State<MainPage2>{
                     ); 
                   }).toList();
               });
-    }if (_backEnd.getIconState()=='disconnected'){
+    }if (globals.isConnected==false){
     return new PopupMenuButton<BlueInfo>(
                 icon: Icon(Icons.bluetooth),
                 elevation: 3.2,
@@ -301,7 +302,7 @@ Widget _buildImage() {
   }
 
   _connectionState(){
-    if (_backEnd.getIconState()=='connected')
+    if (globals.isConnected==true)
     return "Bluetooth: Connected";
     else
     return "Bluetooth: Disconnected";

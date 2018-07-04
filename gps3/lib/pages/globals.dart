@@ -7,5 +7,7 @@ bool isLoggedIn = false;
 List<BlueInfo> devices = [];
 bool isConnected = false;
 bool canceled = false;
+
 List<Marker> markers = <Marker>[];
+String dest;
 String next;
