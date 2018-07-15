@@ -17,26 +17,26 @@ class BluetoothPage extends StatefulWidget {
   State createState() => new BluetoothPageState();
 }
 
-// class BlueInfo {
-//   String title;
-//   String iD;
+class BlueInfo {
+  String title;
+  String iD;
   
-//   BlueInfo(String titlee, String id) {
-//     iD = id;
-//     title = titlee;
-//     if (title == "" || title == null)
-//       title = iD;
-//   }
+  BlueInfo(String titlee, String id) {
+    iD = id;
+    title = titlee;
+    if (title == "" || title == null)
+      title = iD;
+  }
 
-//   @override
-//   String toString() {
-//     return title + ":" + iD.toString();
-//   }
+  @override
+  String toString() {
+    return title + ":" + iD.toString();
+  }
 
-//   BluetoothDevice toDevice() {
-//     return BluetoothDevice(name: this.title, id: DeviceIdentifier(this.iD), type: BluetoothDeviceType.unknown);
-//   }
-// }
+  BluetoothDevice toDevice() {
+    return BluetoothDevice(name: this.title, id: DeviceIdentifier(this.iD), type: BluetoothDeviceType.unknown);
+  }
+}
 
 class BluetoothPageState extends State<BluetoothPage>{ 
   int index = 0;
@@ -300,7 +300,7 @@ _title(index){
                       title: new Text(_title(i)),
                      onTap: (){
                        print(globals.devices[i]);
-                       _connect(globals.devices[i]); 
+                       _connect(globals.devices[i]);
                        _showSnackBar();
                      }
                        ),

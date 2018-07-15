@@ -8,7 +8,7 @@ import 'package:location/location.dart' as loc;
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
-import 'main_page.dart';
+import 'bluetooth_page.dart';
 import 'globals.dart' as globals;
 
 class Algorithm {

@@ -3,6 +3,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
 import 'main_page2.dart';
+import 'bluetooth_page.dart';
 import 'settings_page.dart';
 import 'package:flutter/services.dart';
 import 'maps_page.dart';
@@ -14,27 +15,6 @@ import 'tutorial.dart';
 
 class MainPage extends StatefulWidget {
   State createState() => new MainPageState();
-}
-
-class BlueInfo {
-  String title;
-  String iD;
-  
-  BlueInfo(String titlee, String id) {
-    iD = id;
-    title = titlee;
-    if (title == "" || title == null)
-      title = iD;
-  }
-
-  @override
-  String toString() {
-    return title + ":" + iD.toString();
-  }
-
-  BluetoothDevice toDevice() {
-    return BluetoothDevice(name: this.title, id: DeviceIdentifier(this.iD), type: BluetoothDeviceType.unknown);
-  }
 }
 
 class MainPageState extends State<MainPage>{ 

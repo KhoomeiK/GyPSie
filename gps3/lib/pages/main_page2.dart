@@ -50,8 +50,6 @@ class MainPage2State extends State<MainPage2>{
   var _mapView = new MapView();
   BluetoothPageState lolaz = new BluetoothPageState();
 
-
-
   _connect(BlueInfo device){
     _backEnd.connect(device.toDevice());
   }
