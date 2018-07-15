@@ -6,12 +6,12 @@ import 'main_page2.dart';
 import 'settings_page.dart';
 
 
-class VibPage extends StatefulWidget {
-  State createState() => new VibPageState();
+class HapticPage extends StatefulWidget {
+  State createState() => new HapticPageState();
 }
 
 
-class VibPageState extends State<VibPage>{ 
+class HapticPageState extends State<HapticPage>{ 
 double _value = 0.0;
 int index = 0;
 
@@ -19,7 +19,7 @@ int index = 0;
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: new Padding (child:new Text("Vibration Adjustment", style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 20.0)),
+        title: new Padding (child:new Text("Haptic Patterns", style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 20.0)),
 
         padding:const EdgeInsets.only(left: 0.0) ),
         actions: <Widget>[
@@ -40,18 +40,12 @@ int index = 0;
       body:
       Container(
         padding: EdgeInsets.all(20.0),
-        child: Column(
+        child: new Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 200.0),
-            Slider(
-              min:0.0,
-              max:100.0,
-              value: _value,
-              onChanged: (double value){_onChanged(value);}
-            ),
-            SizedBox(height: 25.0),
-            Text ("Vibration Level: ${_value.toInt()}", style: new TextStyle(fontFamily: "Rajdhani", fontSize: 25.0)),
-          ],
+          new Text("Under Construction!", style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 20.0)),
+          ]
         ),
       ),
 

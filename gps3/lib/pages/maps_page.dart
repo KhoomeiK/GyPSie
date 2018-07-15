@@ -22,6 +22,9 @@ class _MapsPageState extends State<MapsPage> {
   var staticMapProvider = new StaticMapProvider(api_key);
   Uri staticMapUri;
   final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  int snackBar = 0;
+
 
   // List<Marker> markers = <Marker>[
   //   new Marker("1", "BSR Restuarant", 28.421364, 77.333804,
@@ -39,7 +42,7 @@ class _MapsPageState extends State<MapsPage> {
         initialCameraPosition:
             new CameraPosition(new Location(37.7749, -122.4194), 15.0),
         showUserLocation: true,
-        title: "to "+ globals.dest),
+        title: "Have a Safe Journey!"),
         toolbarActions: [ new ToolbarAction("End Route", 2)],
         );
     mapView.setMarkers(globals.markers);
@@ -50,7 +53,7 @@ class _MapsPageState extends State<MapsPage> {
         case 2:
           globals.canceled=true;
           mapView.dismiss();
-          _showSnackBar();
+          snackBar = 1;
           break;
       }
     });
@@ -66,14 +69,7 @@ class _MapsPageState extends State<MapsPage> {
     });
   }
 
-  void _showSnackBar(){
- if (globals.isConnected==true){
-  _scaffoldstate.currentState.showSnackBar(new SnackBar(
-    content:new Text("Connected!"),
-  ));
-   }
 
-}
 
   @override
   void initState() {
@@ -89,6 +85,8 @@ class _MapsPageState extends State<MapsPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: scaffoldKey,
+      
       appBar: AppBar(
         title: Text("Pulse Directions"),
       ),
@@ -101,10 +99,7 @@ class _MapsPageState extends State<MapsPage> {
               children: <Widget>[
                 new Center(
                   child: Container(
-                    child: new Text(
-                      "Map should show here",
-                      textAlign: TextAlign.center,
-                    ),
+                    child: new CircularProgressIndicator(),
                     padding: const EdgeInsets.all(20.0),
                   ),
                 ),
@@ -117,15 +112,18 @@ class _MapsPageState extends State<MapsPage> {
               ],
             ),
           ),
+          
           new Container(
-            padding: new EdgeInsets.only(top: 10.0),
             child: new Text(
-              "TAP THE MAP TO VIEW WAYPOINTS",
+              "Put on your bands and tap the map to begin",
               style: new TextStyle(fontFamily: "Rajdhani", fontWeight: FontWeight.bold),
+
             ),
           ),
         ],
       ),
+      
     );
   }
+
 }

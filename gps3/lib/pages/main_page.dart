@@ -7,6 +7,9 @@ import 'settings_page.dart';
 import 'package:flutter/services.dart';
 import 'maps_page.dart';
 import 'globals.dart' as globals;
+import 'vibLevel_page.dart';
+import 'haptic_page.dart';
+import 'tutorial.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -45,7 +48,18 @@ class MainPageState extends State<MainPage>{
   int upToDate = 0;
   List<BlueInfo> devices = [];
   var _mapView = new MapView();
+  bool _value = false;
+  int pulse = 0;
+  final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
 
+
+void _showSnackBar(){
+ if (globals.isConnected==true){
+  _scaffoldstate.currentState.showSnackBar(new SnackBar(
+    content:new Text("Please fill in required fields"),
+  ));
+   }
+}
 
   _update() async {
     await _backEnd.scan();
@@ -64,6 +78,8 @@ class MainPageState extends State<MainPage>{
    final form = formKey.currentState;
     if(form.validate()){
         form.save();
+        if (pulse ==1)
+        origin1 = "current location";
         _backEnd.setPoints(origin1, destination);
       }
   }
@@ -90,6 +106,7 @@ class MainPageState extends State<MainPage>{
   }
 
   Widget _buildButton() {
+    
     return RaisedButton(
       padding: EdgeInsets.all(20.0),
       elevation: 8.0,
@@ -97,13 +114,38 @@ class MainPageState extends State<MainPage>{
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
       onPressed: (){ 
         _submit();
+        if ((pulse == 0 && origin1=='') || destination=="")
+        _showSnackBar();
+        else
         Navigator.push(context, MaterialPageRoute(builder: (context) => MapsPage()));
-
-      },
+        },
       color: Colors.lightBlue,
       splashColor: Colors.blue,
     );
   }
+
+  _onChanged(bool value){
+    setState((){
+    _value = value;
+    });
+  }
+
+  Widget _buildSwitch(){
+    return new SwitchListTile(
+      value: _value,
+      title: new Text("Use Current Location"),
+      onChanged: (bool value){
+        _onChanged(value); 
+        if (value==true){
+          pulse = 1;
+        }
+        else{
+          pulse = 0;
+        }
+        },
+    );
+  }
+
 
   Widget _buildBottomNav(){
     return new BottomNavigationBar(
@@ -139,70 +181,6 @@ class MainPageState extends State<MainPage>{
 }
 
 
-
-
-  // Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
-  //   if (_backEnd.getIconState()=='connected'){
-  //   return new PopupMenuButton<BlueInfo>(
-  //               icon: Icon(Icons.bluetooth_connected),
-  //               elevation: 3.2,
-  //               initialValue: devices[0],
-  //               onSelected: _connect,
-  //               itemBuilder: (BuildContext context) {
-  //                 return devices.map((BlueInfo b) {
-  //                   return new PopupMenuItem<BlueInfo>(
-  //                     value: b,
-  //                     child: new Text(b.title)
-  //                   ); 
-  //                 }).toList();
-  //             });
-  //   }if (_backEnd.getIconState()=='disconnected'){
-  //   return new PopupMenuButton<BlueInfo>(
-  //               icon: Icon(Icons.bluetooth),
-  //               elevation: 3.2,
-  //               initialValue: devices[0],
-  //               onSelected: _connect,
-  //               itemBuilder: (BuildContext context) {
-  //                 return devices.map((BlueInfo b) {
-  //                   return new PopupMenuItem<BlueInfo>(
-  //                     value: b,
-  //                     child: new Text(b.title)
-  //                   ); 
-  //                 }).toList();
-  //             });
-  //   }
-  //   else{
-  //   return new PopupMenuButton<BlueInfo>(
-  //               icon: Icon(Icons.bluetooth_searching),
-  //               elevation: 3.2,
-  //               initialValue: devices[0],
-  //               onSelected: _connect,
-  //               itemBuilder: (BuildContext context) {
-  //                 return devices.map((BlueInfo b) {
-  //                   return new PopupMenuItem<BlueInfo>(
-  //                     value: b,
-  //                     child: new Text(b.title)
-  //                   ); 
-  //                 }).toList();
-  //             });
-  //   }
-  // }
-
-  // Widget _buildButton2() {
-  //   return RaisedButton(
-  //     padding: EdgeInsets.all(20.0),
-  //     elevation: 8.0,
-  //     child: Text("Disconnect", style: TextStyle(color: Colors.white, fontSize: 20.0)),
-  //     shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-  //     onPressed: (){ 
-  //       _disconnect();
-  //     },
-  //     color: Colors.lightBlue,
-  //     splashColor: Colors.blue,
-  //   );
-  // }
-
-
   Widget _buildDrawer() {
     return Drawer(child:
       ListView(children: <Widget>[
@@ -215,9 +193,9 @@ class MainPageState extends State<MainPage>{
             ],
           ),
         ),
-        ListTile(title: Text("Vibrational Levels", style: TextStyle(fontFamily: "Rajdhani"))),
-        ListTile(title: Text("Haptic Patterns", style: TextStyle(fontFamily: "Rajdhani"))),
-        ListTile(title: Text("Rerun Tutorial", style: TextStyle(fontFamily: "Rajdhani"))),
+        ListTile(title: Text("Vibrational Levels", style: TextStyle(fontFamily: "Rajdhani")), onTap:() {Navigator.push(context, MaterialPageRoute(builder: (context) => VibPage()));}),
+        ListTile(title: Text("Haptic Patterns", style: TextStyle(fontFamily: "Rajdhani")), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HapticPage()));}),
+        ListTile(title: Text("Rerun Tutorial", style: TextStyle(fontFamily: "Rajdhani")), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => TutorialPage()));}),
         ListTile(title: Text("Settings", style: TextStyle(fontFamily: "Rajdhani")), onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));}),
         ListTile(title: Text("Help", style: TextStyle(fontFamily: "Rajdhani"))),
         ListTile(title: Text("About Us", style: TextStyle(fontFamily: "Rajdhani"))),
@@ -235,7 +213,7 @@ class MainPageState extends State<MainPage>{
   ]);
   _update();
     return new Scaffold(
-      
+      key: _scaffoldstate,
       appBar: AppBar(
         title: new Padding (child:new Text("Navigation", style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 25.0)),
 
@@ -245,7 +223,7 @@ class MainPageState extends State<MainPage>{
           Container(
             padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
             child: GestureDetector(
-              onTap: () { },
+              onTap: () {},
               child: Icon(Icons.battery_full),
             )
           ),          
@@ -261,10 +239,11 @@ class MainPageState extends State<MainPage>{
         child: Column(
           children: <Widget>[
             _buildForm(),
-            SizedBox(height: 25.0),
+            SizedBox(height: 9.0),
+            _buildSwitch(),
+            SizedBox(height: 9.0),
             _buildButton(),
             SizedBox(height: 25.0),
-            
             // _buildButton2(),
             Flex(
               direction: Axis.vertical,
