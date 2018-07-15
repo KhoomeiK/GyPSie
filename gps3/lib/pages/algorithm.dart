@@ -32,10 +32,10 @@ class Algorithm {
   scan() { // connect to bluetooth device
     print("scanning to start");
     scanSubscription = blue.scan().listen((scanResult){
-    BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
+      BlueInfo d = new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
 
-    if (globals.devices.indexOf(d)==-1)
-      globals.devices.add(d);
+      if (globals.devices.indexOf(d)==-1)
+        globals.devices.add(d);
     });
   }
 
@@ -74,12 +74,12 @@ class Algorithm {
     // print(await band.readDescriptor(char.descriptors[0]));
 
     List<BluetoothService> services = await mainBand.discoverServices();
-        var characteristics = services[0].characteristics;
-        for (BluetoothCharacteristic c in characteristics){
-          List<int> value = await mainBand.readCharacteristic(c);
-          print(value);
-          await mainBand.writeCharacteristic(c, [0x12, 0x34]);
-      };
+    var characteristics = services[0].characteristics;
+    for (BluetoothCharacteristic c in characteristics){
+      List<int> value = await mainBand.readCharacteristic(c);
+      print(value);
+      await mainBand.writeCharacteristic(c, [0x12, 0x34]);
+    };
 
     // List<int> value = await band.readCharacteristic(char);
     // print("value og");

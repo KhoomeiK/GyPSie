@@ -69,8 +69,6 @@ class _MapsPageState extends State<MapsPage> {
     });
   }
 
-
-
   @override
   void initState() {
     // TODO: implement initState

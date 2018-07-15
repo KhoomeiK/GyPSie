@@ -66,14 +66,6 @@ void _showSnackBar(){
     return globals.devices;
   }
 
-  _connect(BlueInfo device){
-    _backEnd.connect(device.toDevice());
-  }
-
-  _disconnect() {
-    _backEnd.disconnect();
-  }
-
   void _submit() {
    final form = formKey.currentState;
     if(form.validate()){

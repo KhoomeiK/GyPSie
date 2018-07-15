@@ -52,7 +52,7 @@ class BluetoothPageState extends State<BluetoothPage>{
   final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
 
 
-   update() async {
+  update() async {
     await _backEnd.scan();
     print(globals.devices);
     return globals.devices;
@@ -65,10 +65,7 @@ void _showSnackBar(){
     content:new Text("Connected!"),
   ));
    }
-
 }
-
-
   _connect(BlueInfo device){
     _backEnd.connect(device.toDevice());
   }
@@ -76,7 +73,6 @@ void _showSnackBar(){
   _disconnect() {
     _backEnd.disconnect();
   }
-
 
   Widget _buildBottomNav(){
     return new BottomNavigationBar(
@@ -307,6 +303,7 @@ _title(index){
                       new ListTile(
                       title: new Text(_title(i)),
                      onTap: (){
+                       print(globals.devices[i]);
                        _connect(globals.devices[i]); 
                        _showSnackBar();
                      }
