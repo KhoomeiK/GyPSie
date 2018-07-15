@@ -73,12 +73,14 @@ class Algorithm {
     // await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
     // print(await band.readDescriptor(char.descriptors[0]));
 
-    print(mainBand.name);
+    print(mainBand.name); //service 1 characteristic 0
     List<BluetoothService> services = await mainBand.discoverServices();
-    List<BluetoothCharacteristic> characteristics = services[0].characteristics;
-      List<int> value = await mainBand.readCharacteristic(characteristics[3]);
+    List<BluetoothCharacteristic> characteristics = services[1].characteristics;
+      List<int> value = await mainBand.readCharacteristic(characteristics[0]);
       print(value);
-      await mainBand.writeCharacteristic(characteristics[3], [0x12]);
+      await mainBand.writeCharacteristic(characteristics[0], [0x12]);
+      List<int> value1 = await mainBand.readCharacteristic(characteristics[0]);
+      print(value1);
     
     
 
@@ -154,11 +156,11 @@ class Algorithm {
         return "You have canceled your trip";}
 
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
-        transmit(dis);
+        globals.globalDevice.transmit(dis);
       }
       else if (dis < 10) { // once past the waypoint
         while (await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]) < 10) {
-          transmit(0);
+          globals.globalDevice.transmit(0);
         }
         i++; // go to next step 
       }
