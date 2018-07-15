@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'algorithm.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:map_view/map_view.dart';
 import 'main_page.dart';
-import 'package:flutter/services.dart';
 import 'settings_page.dart';
 import 'bluetooth_page.dart';
 import 'globals.dart' as globals;
 import 'vibLevel_page.dart';
 import 'haptic_page.dart';
 import 'tutorial.dart';
-
 
 class MainPage2 extends StatefulWidget {
   State createState() => new MainPage2State();
@@ -19,7 +16,7 @@ class MainPage2 extends StatefulWidget {
 // class BlueInfo {
 //   String title;
 //   String iD;
-  
+
 //   BlueInfo(String titlee, String id) {
 //     iD = id;
 //     title = titlee;
@@ -37,7 +34,7 @@ class MainPage2 extends StatefulWidget {
 //   }
 // }
 
-class MainPage2State extends State<MainPage2>{ 
+class MainPage2State extends State<MainPage2> {
   Algorithm _backEnd = new Algorithm();
   int index = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -46,11 +43,11 @@ class MainPage2State extends State<MainPage2>{
   String origin1;
   String destination;
   int upToDate = 0;
-  List<BlueInfo> devices = [];
+  List<globals.BlueInfo> devices = [];
   var _mapView = new MapView();
   BluetoothPageState lolaz = new BluetoothPageState();
 
-  _connect(BlueInfo device){
+  _connect(globals.BlueInfo device) {
     _backEnd.connect(device.toDevice());
   }
 
@@ -59,26 +56,30 @@ class MainPage2State extends State<MainPage2>{
   }
 
   void _submit() {
-   final form = formKey.currentState;
-    if(form.validate()){
-        form.save();
-        _backEnd.setPoints(origin1, destination);
-      }
+    final form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      _backEnd.setPoints(origin1, destination);
+    }
   }
 
-  Widget _buildForm(){
+  Widget _buildForm() {
     return Form(
       key: formKey,
       child: Column(
         children: <Widget>[
           TextFormField(
-            decoration: new InputDecoration(labelText: "Origin", border: OutlineInputBorder(borderRadius: _borderRadius)),
+            decoration: new InputDecoration(
+                labelText: "Origin",
+                border: OutlineInputBorder(borderRadius: _borderRadius)),
             validator: (val) => (val == null) ? 'Empty' : null,
             onSaved: (val) => origin1 = val,
           ),
           SizedBox(height: 12.0),
           TextFormField(
-            decoration: new InputDecoration(labelText: "Destination", border: OutlineInputBorder(borderRadius: _borderRadius)),
+            decoration: new InputDecoration(
+                labelText: "Destination",
+                border: OutlineInputBorder(borderRadius: _borderRadius)),
             validator: (val) => (val == null) ? 'Empty' : null,
             onSaved: (val) => destination = val,
           ),
@@ -93,7 +94,7 @@ class MainPage2State extends State<MainPage2>{
       elevation: 8.0,
       child: Text("Go!", style: TextStyle(color: Colors.white, fontSize: 20.0)),
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-      onPressed: (){ 
+      onPressed: () {
         _submit();
       },
       color: Colors.lightBlue,
@@ -101,17 +102,17 @@ class MainPage2State extends State<MainPage2>{
     );
   }
 
-  Widget _buildBottomNav(){
+  Widget _buildBottomNav() {
     return new BottomNavigationBar(
       currentIndex: 1,
       onTap: (index) {
-          setState(() {
-            this.index = index;
-            if (index ==1){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-            }
+        setState(() {
+          this.index = index;
+          if (index == 1) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainPage()));
           }
-          );
+        });
       },
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
@@ -120,68 +121,62 @@ class MainPage2State extends State<MainPage2>{
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title: new Text("Navigation", style: TextStyle(fontWeight: FontWeight.bold)),
+          title: new Text("Navigation",
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.account_box),
           title: new Text("Profile"),
         )
       ],
-       
     );
   }
 
   void showMap() {
     _mapView.show(new MapOptions(showUserLocation: true));
-}
+  }
 
-
-
-
-  Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
-    if (globals.isConnected==true){
-    return new PopupMenuButton<BlueInfo>(
-                icon: Icon(Icons.bluetooth_connected),
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
-    }if (globals.isConnected==false){
-    return new PopupMenuButton<BlueInfo>(
-                icon: Icon(Icons.bluetooth),
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
+  Widget createListView(
+    BuildContext context,
+    AsyncSnapshot snapshot,
+  ) {
+    if (globals.isConnected == true) {
+      return new PopupMenuButton<globals.BlueInfo>(
+          icon: Icon(Icons.bluetooth_connected),
+          elevation: 3.2,
+          initialValue: devices[0],
+          onSelected: _connect,
+          itemBuilder: (BuildContext context) {
+            return devices.map((globals.BlueInfo b) {
+              return new PopupMenuItem<globals.BlueInfo>(
+                  value: b, child: new Text(b.title));
+            }).toList();
+          });
     }
-    else{
-    return new PopupMenuButton<BlueInfo>(
-                icon: Icon(Icons.bluetooth_searching),
-                elevation: 3.2,
-                initialValue: devices[0],
-                onSelected: _connect,
-                itemBuilder: (BuildContext context) {
-                  return devices.map((BlueInfo b) {
-                    return new PopupMenuItem<BlueInfo>(
-                      value: b,
-                      child: new Text(b.title)
-                    ); 
-                  }).toList();
-              });
+    if (globals.isConnected == false) {
+      return new PopupMenuButton<globals.BlueInfo>(
+          icon: Icon(Icons.bluetooth),
+          elevation: 3.2,
+          initialValue: devices[0],
+          onSelected: _connect,
+          itemBuilder: (BuildContext context) {
+            return devices.map((globals.BlueInfo b) {
+              return new PopupMenuItem<globals.BlueInfo>(
+                  value: b, child: new Text(b.title));
+            }).toList();
+          });
+    } else {
+      return new PopupMenuButton<globals.BlueInfo>(
+          icon: Icon(Icons.bluetooth_searching),
+          elevation: 3.2,
+          initialValue: devices[0],
+          onSelected: _connect,
+          itemBuilder: (BuildContext context) {
+            return devices.map((globals.BlueInfo b) {
+              return new PopupMenuItem<globals.BlueInfo>(
+                  value: b, child: new Text(b.title));
+            }).toList();
+          });
     }
   }
 
@@ -191,7 +186,7 @@ class MainPage2State extends State<MainPage2>{
   //     elevation: 8.0,
   //     child: Text("Disconnect", style: TextStyle(color: Colors.white, fontSize: 20.0)),
   //     shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-  //     onPressed: (){ 
+  //     onPressed: (){
   //       _disconnect();
   //     },
   //     color: Colors.lightBlue,
@@ -199,103 +194,139 @@ class MainPage2State extends State<MainPage2>{
   //   );
   // }
 
-
   Widget _buildDrawer() {
-    return Drawer(child:
-      ListView(children: <Widget>[
+    return Drawer(
+        child: ListView(
+      children: <Widget>[
         DrawerHeader(
           child: Row(
             children: <Widget>[
-              Image.asset('assets/Logo.png', width: 70.0, height:70.0),
+              Image.asset('assets/Logo.png', width: 70.0, height: 70.0),
               SizedBox(width: 25.0),
-              Text("Hi, Ryan", style: TextStyle(fontFamily: "Rajdhani", fontSize: 20.0, fontWeight: FontWeight.bold))            ],
+              Text("Hi, Ryan",
+                  style: TextStyle(
+                      fontFamily: "Rajdhani",
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold))
+            ],
           ),
         ),
-        ListTile(title: Text("Vibrational Levels"), onTap:() {Navigator.push(context, MaterialPageRoute(builder: (context) => VibPage()));}),
-        ListTile(title: Text("Haptic Patterns"), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HapticPage()));}),
-        ListTile(title: Text("Rerun Tutorial"), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => TutorialPage()));}),
-        ListTile(title: Text("Settings"), onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));}),
+        ListTile(
+            title: Text("Vibrational Levels"),
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => VibPage()));
+            }),
+        ListTile(
+            title: Text("Haptic Patterns"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HapticPage()));
+            }),
+        ListTile(
+            title: Text("Rerun Tutorial"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TutorialPage()));
+            }),
+        ListTile(
+            title: Text("Settings"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
+            }),
         ListTile(title: Text("Help")),
         ListTile(title: Text("About Us")),
-      ],)
-    );
+      ],
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     //showMap();
     return new Scaffold(
-      
       appBar: AppBar(
-        title: new Padding (child: new Text ("Device", style: TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 25.0)),
-        padding:const EdgeInsets.only(left: 0.0) ),
+        title: new Padding(
+            child: new Text("Device",
+                style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: "Rajdhani",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 25.0)),
+            padding: const EdgeInsets.only(left: 0.0)),
         actions: <Widget>[
-
-           Container(
-            padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
-            child: GestureDetector(
-              onTap: () { },
-              child: Icon(Icons.battery_full),
-            )
-          ),          
+          Container(
+              padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: Icon(Icons.battery_full),
+              )),
           SizedBox(width: 9.0),
           new Icon(Icons.bluetooth),
           SizedBox(width: 17.0),
-          SizedBox(width: 5.0),          
+          SizedBox(width: 5.0),
         ],
       ),
-      body:
-      
-      Container(
+      body: Container(
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
-            Row(
-              children: <Widget>[
+            Row(children: <Widget>[
               SizedBox(height: 25.0),
-            new Expanded(
-              child: _image(),
-            ),
-            new Expanded(
-              child: _image2(),
-            ),
-            SizedBox(height: 25.0),]),
+              new Expanded(
+                child: _image(),
+              ),
+              new Expanded(
+                child: _image2(),
+              ),
+              SizedBox(height: 25.0),
+            ]),
             SizedBox(height: 30.0),
-            new Text("Ryan's Pulse Bands", style: new TextStyle(fontWeight: FontWeight.bold, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 25.0)), 
-              //  _bandName(),  
+            new Text("Ryan's Pulse Bands",
+                style: new TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Rajdhani",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 25.0)),
+            //  _bandName(),
             SizedBox(height: 20.0),
-            new Text("Status: ON", style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 20.0)),
+            new Text("Status: ON",
+                style: new TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: "Rajdhani",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 20.0)),
             SizedBox(height: 20.0),
-            new Text(_connectionState(), style: new TextStyle(fontWeight: FontWeight.normal, fontFamily: "Rajdhani", fontStyle: FontStyle.normal, fontSize: 20.0)),
+            new Text(_connectionState(),
+                style: new TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: "Rajdhani",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 20.0)),
 
-             _batterylevel(),
+            _batterylevel(),
           ],
         ),
-          
-           // _buildButton2(),
-        ),      
 
-
-    
-
-      drawer: _buildDrawer(),
-      bottomNavigationBar:
-      _buildBottomNav(),
-      floatingActionButton: new FloatingActionButton(
-         elevation: 0.0,
-      child: new Icon(Icons.bluetooth),
-      onPressed: (){
-         Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothPage()));}
+        // _buildButton2(),
       ),
-
-    );  
+      drawer: _buildDrawer(),
+      bottomNavigationBar: _buildBottomNav(),
+      floatingActionButton: new FloatingActionButton(
+          elevation: 0.0,
+          child: new Icon(Icons.bluetooth),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => BluetoothPage()));
+          }),
+    );
   }
 
-  _connectionState(){
-    if (globals.isConnected==true)
-    return "Bluetooth: Connected";
+  _connectionState() {
+    if (globals.isConnected == true)
+      return "Bluetooth: Connected";
     else
-    return "Bluetooth: Disconnected";
+      return "Bluetooth: Disconnected";
   }
 
   _image() {
@@ -306,12 +337,12 @@ class MainPage2State extends State<MainPage2>{
     return Image.asset('assets/download copy.png', fit: BoxFit.cover);
   }
 
-  _batterylevel(){
+  _batterylevel() {
     return Image.asset('assets/battery.png', fit: BoxFit.cover);
   }
 
   // _bandName() {
-    
+
   //       new ListView.builder(
   //          itemCount: 5,
   //          itemBuilder: (BuildContext context, int index){
