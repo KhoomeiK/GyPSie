@@ -39,7 +39,6 @@ class BluetoothPage extends StatefulWidget {
 // }
 
 class BluetoothPageState extends State<BluetoothPage>{ 
-  Algorithm _backEnd = new Algorithm();
   int index = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   dynamic _borderRadius = new BorderRadius.circular(10.0);
@@ -53,7 +52,7 @@ class BluetoothPageState extends State<BluetoothPage>{
 
 
   update() async {
-    await _backEnd.scan();
+    await globals.globalDevice.scan();
     print(globals.devices);
     return globals.devices;
    // await new Future.delayed(new Duration(seconds: 3));
@@ -67,11 +66,11 @@ void _showSnackBar(){
    }
 }
   _connect(BlueInfo device){
-    _backEnd.connect(device.toDevice());
+    globals.globalDevice.connect(device.toDevice());
   }
 
   _disconnect() {
-    _backEnd.disconnect();
+    globals.globalDevice.disconnect();
   }
 
   Widget _buildBottomNav(){
@@ -114,7 +113,7 @@ initState() {
 }
 
   // Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
-  //   if (__backEnd.getIconState()=='connected'){
+  //   if (_globals.globalDevice.getIconState()=='connected'){
   //   return new PopupMenuButton<BlueInfo>(
   //               icon: Icon(Icons.bluetooth_connected),
   //               elevation: 3.2,
@@ -128,7 +127,7 @@ initState() {
   //                   ); 
   //                 }).toList();
   //             });
-  //   }if (__backEnd.getIconState()=='disconnected'){
+  //   }if (_globals.globalDevice.getIconState()=='disconnected'){
   //   return new PopupMenuButton<BlueInfo>(
   //               icon: Icon(Icons.bluetooth),
   //               elevation: 3.2,
@@ -321,7 +320,7 @@ _title(index){
          elevation: 0.0,
       child: new Icon(Icons.bluetooth_disabled),
       onPressed: (){
-         _backEnd.disconnect();
+         globals.globalDevice.disconnect();
          __showSnackBar();//replace lol with connection state         }
       }),
 

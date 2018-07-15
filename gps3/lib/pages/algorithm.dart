@@ -75,12 +75,12 @@ class Algorithm {
 
     print(mainBand.name);
     List<BluetoothService> services = await mainBand.discoverServices();
-    var characteristics = services[0].characteristics;
-    for (BluetoothCharacteristic c in characteristics){
-      List<int> value = await mainBand.readCharacteristic(c);
+    List<BluetoothCharacteristic> characteristics = services[0].characteristics;
+      List<int> value = await mainBand.readCharacteristic(characteristics[3]);
       print(value);
-      await mainBand.writeCharacteristic(c, [0x12, 0x34]);
-    };
+      await mainBand.writeCharacteristic(characteristics[3], [0x12]);
+    
+    
 
     // List<int> value = await band.readCharacteristic(char);
     // print("value og");

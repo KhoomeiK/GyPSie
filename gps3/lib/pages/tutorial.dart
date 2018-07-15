@@ -4,6 +4,8 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:map_view/map_view.dart';
 import 'main_page2.dart';
 import 'settings_page.dart';
+import 'bluetooth_page.dart';
+import 'globals.dart' as globals;
 
 
 class TutorialPage extends StatefulWidget {
@@ -65,7 +67,7 @@ Algorithm a = new Algorithm();
                  child: Text("Left", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Rajdhani", color: Colors.white, fontSize: 20.0)),
                   shape: RoundedRectangleBorder(borderRadius: _borderRadius),
                    onPressed: (){ 
-                    a.transmit(2);
+                    globals.globalDevice.transmit(2);
                      },
                    color: Colors.lightBlue,
                     splashColor: Colors.blue,
