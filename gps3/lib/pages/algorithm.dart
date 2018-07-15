@@ -66,12 +66,15 @@ class Algorithm {
 
   transmit(num x) async {
     print("transmit");
-    print(mainBand.name);
+    print(mainBand.name); //service 1 characteristic 0
     List<BluetoothService> services = await mainBand.discoverServices();
-    List<BluetoothCharacteristic> characteristics = services[0].characteristics;
-    List<int> value = await mainBand.readCharacteristic(characteristics[3]);
+    List<BluetoothCharacteristic> characteristics = services[1].characteristics;
+    
+    List<int> value = await mainBand.readCharacteristic(characteristics[0]);
     print(value);
-    await mainBand.writeCharacteristic(characteristics[3], [x]);
+    await mainBand.writeCharacteristic(characteristics[0], [x]);
+    List<int> value1 = await mainBand.readCharacteristic(characteristics[0]);
+    print(value1);
   }
 
   disconnect() async {
@@ -96,7 +99,6 @@ class Algorithm {
     await getData(); // sets json from api request
     legs = resp["routes"][0]["legs"][0]; // legs element of json
     steps = legs["steps"]; // steps element of legs
-    // print(legs); // prints legs element to screen
     Vibrate.vibrate(); // vibrates as soon as Go button clicked
 
     for(int i = 0; i < steps.length; i++) {
@@ -136,11 +138,11 @@ class Algorithm {
       }
 
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
-        transmit(dis);
+        globals.globalDevice.transmit(dis);
       }
       else if (dis < 10) { // once past the waypoint
         while (await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]) < 10) {
-          transmit(0);
+          globals.globalDevice.transmit(0);
         }
         i++; // go to next step 
       }
