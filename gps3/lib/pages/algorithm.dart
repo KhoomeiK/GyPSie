@@ -66,36 +66,17 @@ class Algorithm {
 
   transmit(num x) async {
     print("transmit");
-
-    // print(char.descriptors);
-    // for (BluetoothDescriptor d in char.descriptors)
-    //   print(await band.readDescriptor(d));
-    // await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
-    // print(await band.readDescriptor(char.descriptors[0]));
-
     print(mainBand.name);
     List<BluetoothService> services = await mainBand.discoverServices();
     List<BluetoothCharacteristic> characteristics = services[0].characteristics;
-      List<int> value = await mainBand.readCharacteristic(characteristics[3]);
-      print(value);
-      await mainBand.writeCharacteristic(characteristics[3], [0x12]);
-    
-    
-
-    // List<int> value = await band.readCharacteristic(char);
-    // print("value og");
-    // print(value);
-
-    // await band.writeCharacteristic(char, [5 * x]); // error 
-
-    // value = await band.readCharacteristic(char);
-    // print("value new");
-    // print(value);
+    List<int> value = await mainBand.readCharacteristic(characteristics[3]);
+    print(value);
+    await mainBand.writeCharacteristic(characteristics[3], [x]);
   }
 
   disconnect() async {
     deviceConnection.cancel();
-    globals.isConnected==false;
+    globals.isConnected = false;
   }
 
   setPoints(String origin, String dest) async { // receives origin and destination from textbox and 
@@ -149,9 +130,10 @@ class Algorithm {
       globals.next = steps[i]["html_instructions"];
       num dis = await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]); // distance between cur and next waypoint
       print(dis);
-      if (globals.canceled){
+      if (globals.canceled) {
         globals.markers.clear();
-        return "You have canceled your trip";}
+        return "You have canceled your trip";
+      }
 
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
         transmit(dis);
