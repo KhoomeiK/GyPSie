@@ -8,6 +8,9 @@ import 'package:flutter/services.dart';
 import 'main_page.dart';
 import 'package:async/async.dart';
 import 'globals.dart' as globals;
+import 'vibLevel_page.dart';
+import 'haptic_page.dart';
+import 'tutorial.dart';
 
 
 class BluetoothPage extends StatefulWidget {
@@ -227,9 +230,9 @@ _title(index){
             ],
           ),
         ),
-        ListTile(title: Text("Vibrational Levels", style: TextStyle(fontFamily: "Rajdhani"))),
-        ListTile(title: Text("Haptic Patterns", style: TextStyle(fontFamily: "Rajdhani"))),
-        ListTile(title: Text("Rerun Tutorial", style: TextStyle(fontFamily: "Rajdhani"))),
+        ListTile(title: Text("Vibrational Levels", style: TextStyle(fontFamily: "Rajdhani")), onTap:() {Navigator.push(context, MaterialPageRoute(builder: (context) => VibPage()));}),
+        ListTile(title: Text("Haptic Patterns", style: TextStyle(fontFamily: "Rajdhani")), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HapticPage()));}),
+        ListTile(title: Text("Rerun Tutorial", style: TextStyle(fontFamily: "Rajdhani")), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => TutorialPage()));}),
         ListTile(title: Text("Settings", style: TextStyle(fontFamily: "Rajdhani")), onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));}),
         ListTile(title: Text("Help", style: TextStyle(fontFamily: "Rajdhani"))),
         ListTile(title: Text("About Us", style: TextStyle(fontFamily: "Rajdhani"))),

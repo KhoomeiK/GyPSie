@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import 'settings_page.dart';
 import 'bluetooth_page.dart';
 import 'globals.dart' as globals;
+import 'vibLevel_page.dart';
+import 'haptic_page.dart';
+import 'tutorial.dart';
 
 
 class MainPage2 extends StatefulWidget {
@@ -210,26 +213,15 @@ class MainPage2State extends State<MainPage2>{
               Text("Hi, Ryan", style: TextStyle(fontFamily: "Rajdhani", fontSize: 20.0, fontWeight: FontWeight.bold))            ],
           ),
         ),
-        ListTile(title: Text("Vibrational Levels")),
-        ListTile(title: Text("Haptic Patterns")),
-        ListTile(title: Text("Rerun Tutorial")),
+        ListTile(title: Text("Vibrational Levels"), onTap:() {Navigator.push(context, MaterialPageRoute(builder: (context) => VibPage()));}),
+        ListTile(title: Text("Haptic Patterns"), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => HapticPage()));}),
+        ListTile(title: Text("Rerun Tutorial"), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => TutorialPage()));}),
         ListTile(title: Text("Settings"), onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));}),
         ListTile(title: Text("Help")),
         ListTile(title: Text("About Us")),
       ],)
     );
   }
-
-Widget _buildImage() {
-  DecoratedBox(
-       decoration: new BoxDecoration(
-        image: new DecorationImage(
-          image: new AssetImage('assets/download.png')
-        )
-      )
-  );
-
-}
 
   @override
   Widget build(BuildContext context) {

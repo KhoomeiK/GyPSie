@@ -18,7 +18,7 @@ class Algorithm {
   List<BlueInfo> devices = [];
   StreamSubscription<ScanResult> scanSubscription; 
   StreamSubscription<BluetoothDeviceState> deviceConnection;
-  BluetoothDevice band;
+  BluetoothDevice mainBand;
   BluetoothCharacteristic char;
   String _bTState = 'disconnected';
 
@@ -45,7 +45,7 @@ class Algorithm {
       if(s == BluetoothDeviceState.connected) { // if connected
         scanSubscription.cancel(); // end scan once found device 
         globals.isConnected = true;
-        this.band = band;
+        mainBand = band;
         listServ();
       }
     });
@@ -53,7 +53,7 @@ class Algorithm {
 
   listServ() async {
     print("listServ");
-    List<BluetoothService> services = await band.discoverServices();
+    List<BluetoothService> services = await mainBand.discoverServices();
     char = services[0].characteristics[0];
     print("service/characteristic info");
     for(var i = 0; i < services.length-1; i++) { // ble has 1 service with 2 characteristics
@@ -61,7 +61,7 @@ class Algorithm {
       print(services[i].characteristics);
       print(services[i].characteristics[0]);
     }
-    transmit(5);
+    // transmit(5);
   }
 
   transmit(num x) async {
@@ -73,16 +73,23 @@ class Algorithm {
     // await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
     // print(await band.readDescriptor(char.descriptors[0]));
 
-    List<int> value = await band.readCharacteristic(char);
-    print("value og");
-    print(value);
+    List<BluetoothService> services = await mainBand.discoverServices();
+        var characteristics = services[0].characteristics;
+        for (BluetoothCharacteristic c in characteristics){
+          List<int> value = await mainBand.readCharacteristic(c);
+          print(value);
+          await mainBand.writeCharacteristic(c, [0x12, 0x34]);
+      };
 
-    var r = await band.writeCharacteristic(char, [5 * x]); // error 
-    print(r);
+    // List<int> value = await band.readCharacteristic(char);
+    // print("value og");
+    // print(value);
 
-    value = await band.readCharacteristic(char);
-    print("value new");
-    print(value);
+    // await band.writeCharacteristic(char, [5 * x]); // error 
+
+    // value = await band.readCharacteristic(char);
+    // print("value new");
+    // print(value);
   }
 
   disconnect() async {
@@ -141,8 +148,9 @@ class Algorithm {
       globals.next = steps[i]["html_instructions"];
       num dis = await dist(steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"]); // distance between cur and next waypoint
       print(dis);
-      if (globals.canceled)
-        return "You have canceled your trip";
+      if (globals.canceled){
+        globals.markers.clear();
+        return "You have canceled your trip";}
 
       if (dis <= 200 && dis >= 10) { // if within 200m of waypoint
         transmit(dis);
