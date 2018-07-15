@@ -22,7 +22,7 @@ class Algorithm {
   BluetoothCharacteristic char;
   String _bTState = 'disconnected';
 
-  Algorithm(){ // constructor
+  Algorithm() { // constructor
     link = "";
     resp = null;
     legs = null;
@@ -73,6 +73,7 @@ class Algorithm {
     // await band.writeDescriptor(char.descriptors[0], [1,1,1,1]);
     // print(await band.readDescriptor(char.descriptors[0]));
 
+    print(mainBand.name);
     List<BluetoothService> services = await mainBand.discoverServices();
     var characteristics = services[0].characteristics;
     for (BluetoothCharacteristic c in characteristics){
