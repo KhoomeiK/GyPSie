@@ -65,9 +65,29 @@ class Algorithm {
   //   }
   // }
 
-  transmit(num x) async {
+  transmit(num x, int i) async {
     print("transmit");
     print(mainBand.name);
+
+    print(steps[i]["maneuver"]);
+    print(steps[i]["html_instructions"]);
+
+    String side = "";
+    x = (5 * x) ~/ 100;
+
+    if (steps[i]["maneuver"].toString().indexOf("left") != -1)
+      side = "left";
+    else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
+      side = "right";
+    else {
+      if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
+        side = "left";
+      else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
+        side = "right";
+      else
+        throw(new Exception(["Could not determine whether to turn right or left"])); // change eventually
+    }
+
     List<BluetoothService> services =
         await mainBand.discoverServices(); // available services
     List<BluetoothCharacteristic> characteristics =
@@ -76,11 +96,17 @@ class Algorithm {
     List<int> value = await mainBand
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
+
+    if (side == "right")
     await mainBand
         .writeCharacteristic(characteristics[0], [x]); // write to serv1 char0
-    List<int> value1 = await mainBand
+    else if (side == "left")
+      await mainBand
+          .writeCharacteristic(characteristics[0], [x+100]); // write to serv1 char0
+    
+    value = await mainBand
         .readCharacteristic(characteristics[0]); // read new serv1 char0
-    print(value1);
+    print(value);
   }
 
   disconnect() async {
@@ -127,11 +153,11 @@ class Algorithm {
   }
 
   loop() async {
-    for (var step in steps) {
-      // prints maneuver for each step
-      print(step["maneuver"]);
-      print(step["html_instructions"]);
-    }
+    // for (var step in steps) {
+    //   // prints maneuver for each step
+    //   print(step["maneuver"]);
+    //   print(step["html_instructions"]);
+    // }
 
     print(await getLoc());
     print(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]));
@@ -158,13 +184,13 @@ class Algorithm {
 
       if (dis <= 200 && dis >= 10) {
         // if within 200m of waypoint
-        globals.globalDevice.transmit(dis);
+        globals.globalDevice.transmit(dis, i);
       } else if (dis < 10) {
         // once past the waypoint
         while (await dist(steps[i]["end_location"]["lat"],
                 steps[i]["end_location"]["lng"]) <
             10) {
-          globals.globalDevice.transmit(0);
+          globals.globalDevice.transmit(0, i);
         }
         i++; // go to next step
       }
