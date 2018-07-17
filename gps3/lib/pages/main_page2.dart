@@ -35,7 +35,6 @@ class MainPage2 extends StatefulWidget {
 // }
 
 class MainPage2State extends State<MainPage2> {
-  Algorithm _backEnd = new Algorithm();
   int index = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
@@ -43,63 +42,24 @@ class MainPage2State extends State<MainPage2> {
   String origin1;
   String destination;
   int upToDate = 0;
-  List<globals.BlueInfo> devices = [];
+  List<BlueInfo> devices = [];
   var _mapView = new MapView();
   BluetoothPageState lolaz = new BluetoothPageState();
 
-  _connect(globals.BlueInfo device) {
-    _backEnd.connect(device.toDevice());
+  _connect(BlueInfo device) {
+    globals.globalDevice.connect(device.toDevice());
   }
 
   _disconnect() {
-    _backEnd.disconnect();
+    globals.globalDevice.disconnect();
   }
 
   void _submit() {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
-      _backEnd.setPoints(origin1, destination);
+      globals.globalDevice.setPoints(origin1, destination);
     }
-  }
-
-  Widget _buildForm() {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            decoration: new InputDecoration(
-                labelText: "Origin",
-                border: OutlineInputBorder(borderRadius: _borderRadius)),
-            validator: (val) => (val == null) ? 'Empty' : null,
-            onSaved: (val) => origin1 = val,
-          ),
-          SizedBox(height: 12.0),
-          TextFormField(
-            decoration: new InputDecoration(
-                labelText: "Destination",
-                border: OutlineInputBorder(borderRadius: _borderRadius)),
-            validator: (val) => (val == null) ? 'Empty' : null,
-            onSaved: (val) => destination = val,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButton() {
-    return RaisedButton(
-      padding: EdgeInsets.all(20.0),
-      elevation: 8.0,
-      child: Text("Go!", style: TextStyle(color: Colors.white, fontSize: 20.0)),
-      shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-      onPressed: () {
-        _submit();
-      },
-      color: Colors.lightBlue,
-      splashColor: Colors.blue,
-    );
   }
 
   Widget _buildBottomNav() {
@@ -136,62 +96,48 @@ class MainPage2State extends State<MainPage2> {
     _mapView.show(new MapOptions(showUserLocation: true));
   }
 
-  Widget createListView(
-    BuildContext context,
-    AsyncSnapshot snapshot,
-  ) {
-    if (globals.isConnected == true) {
-      return new PopupMenuButton<globals.BlueInfo>(
-          icon: Icon(Icons.bluetooth_connected),
-          elevation: 3.2,
-          initialValue: devices[0],
-          onSelected: _connect,
-          itemBuilder: (BuildContext context) {
-            return devices.map((globals.BlueInfo b) {
-              return new PopupMenuItem<globals.BlueInfo>(
-                  value: b, child: new Text(b.title));
-            }).toList();
-          });
-    }
-    if (globals.isConnected == false) {
-      return new PopupMenuButton<globals.BlueInfo>(
-          icon: Icon(Icons.bluetooth),
-          elevation: 3.2,
-          initialValue: devices[0],
-          onSelected: _connect,
-          itemBuilder: (BuildContext context) {
-            return devices.map((globals.BlueInfo b) {
-              return new PopupMenuItem<globals.BlueInfo>(
-                  value: b, child: new Text(b.title));
-            }).toList();
-          });
-    } else {
-      return new PopupMenuButton<globals.BlueInfo>(
-          icon: Icon(Icons.bluetooth_searching),
-          elevation: 3.2,
-          initialValue: devices[0],
-          onSelected: _connect,
-          itemBuilder: (BuildContext context) {
-            return devices.map((globals.BlueInfo b) {
-              return new PopupMenuItem<globals.BlueInfo>(
-                  value: b, child: new Text(b.title));
-            }).toList();
-          });
-    }
-  }
-
-  // Widget _buildButton2() {
-  //   return RaisedButton(
-  //     padding: EdgeInsets.all(20.0),
-  //     elevation: 8.0,
-  //     child: Text("Disconnect", style: TextStyle(color: Colors.white, fontSize: 20.0)),
-  //     shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-  //     onPressed: (){
-  //       _disconnect();
-  //     },
-  //     color: Colors.lightBlue,
-  //     splashColor: Colors.blue,
-  //   );
+  // Widget createListView(
+  //   BuildContext context,
+  //   AsyncSnapshot snapshot,
+  // ) {
+  //   if (globals.isConnected == true) {
+  //     return new PopupMenuButton<BlueInfo>(
+  //         icon: Icon(Icons.bluetooth_connected),
+  //         elevation: 3.2,
+  //         initialValue: devices[0],
+  //         onSelected: _connect,
+  //         itemBuilder: (BuildContext context) {
+  //           return devices.map((BlueInfo b) {
+  //             return new PopupMenuItem<BlueInfo>(
+  //                 value: b, child: new Text(b.title));
+  //           }).toList();
+  //         });
+  //   }
+  //   if (globals.isConnected == false) {
+  //     return new PopupMenuButton<BlueInfo>(
+  //         icon: Icon(Icons.bluetooth),
+  //         elevation: 3.2,
+  //         initialValue: devices[0],
+  //         onSelected: _connect,
+  //         itemBuilder: (BuildContext context) {
+  //           return devices.map((BlueInfo b) {
+  //             return new PopupMenuItem<BlueInfo>(
+  //                 value: b, child: new Text(b.title));
+  //           }).toList();
+  //         });
+  //   } else {
+  //     return new PopupMenuButton<BlueInfo>(
+  //         icon: Icon(Icons.bluetooth_searching),
+  //         elevation: 3.2,
+  //         initialValue: devices[0],
+  //         onSelected: _connect,
+  //         itemBuilder: (BuildContext context) {
+  //           return devices.map((BlueInfo b) {
+  //             return new PopupMenuItem<BlueInfo>(
+  //                 value: b, child: new Text(b.title));
+  //           }).toList();
+  //         });
+  //   }
   // }
 
   Widget _buildDrawer() {
@@ -341,17 +287,4 @@ class MainPage2State extends State<MainPage2> {
     return Image.asset('assets/battery.png', fit: BoxFit.cover);
   }
 
-  // _bandName() {
-
-  //       new ListView.builder(
-  //          itemCount: 5,
-  //          itemBuilder: (BuildContext context, int index){
-  //            child: new Column(
-  //              children: <Widget>[
-  //                new Text("Ryan's Pulse Bands"),
-  //              ],
-  //            );
-  //          },
-  //       );
-  // }
 }

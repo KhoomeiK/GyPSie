@@ -11,7 +11,6 @@ class TutorialPageState extends State<TutorialPage> {
   double _value = 0.0;
   int index = 0;
   dynamic _borderRadius = new BorderRadius.circular(10.0);
-  Algorithm a = new Algorithm();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +67,7 @@ class TutorialPageState extends State<TutorialPage> {
                         fontSize: 20.0)),
                 shape: RoundedRectangleBorder(borderRadius: _borderRadius),
                 onPressed: () {
-                  globals.globalDevice.transmit(2);
+                  globals.globalDevice.transmit(2, 0);
                 },
                 color: Colors.lightBlue,
                 splashColor: Colors.blue,
@@ -98,11 +97,11 @@ class TutorialPageState extends State<TutorialPage> {
     );
   }
 
-  void _onChanged(double value) {
-    setState(() {
-      _value = value;
-    });
-  }
+  // void _onChanged(double value) {
+  //   setState(() {
+  //     _value = value;
+  //   });
+  // }
 
   Widget _buildBottomNav() {
     return new BottomNavigationBar(

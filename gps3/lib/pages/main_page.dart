@@ -11,13 +11,37 @@ import 'globals.dart' as globals;
 import 'vibLevel_page.dart';
 import 'haptic_page.dart';
 import 'tutorial.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 class MainPage extends StatefulWidget {
   State createState() => new MainPageState();
 }
 
+class BlueInfo {
+  String title;
+  String iD;
+
+  BlueInfo(String titlee, String id) {
+    iD = id;
+    title = titlee;
+    if (title == "" || title == null) title = iD;
+  }
+
+  @override
+  String toString() {
+    return title + ":" + iD.toString();
+  }
+
+  BluetoothDevice toDevice() {
+    return BluetoothDevice(
+        name: this.title,
+        id: DeviceIdentifier(this.iD),
+        type: BluetoothDeviceType.unknown);
+  }
+}
+
+
 class MainPageState extends State<MainPage> {
-  Algorithm _backEnd = new Algorithm();
   int index = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
@@ -25,12 +49,13 @@ class MainPageState extends State<MainPage> {
   String origin1;
   String destination;
   int upToDate = 0;
-  List<globals.BlueInfo> devices = [];
+  List<BlueInfo> devices = [];
   var _mapView = new MapView();
   bool _value = false;
   int pulse = 0;
   final GlobalKey<ScaffoldState> _scaffoldstate =
       new GlobalKey<ScaffoldState>();
+  Algorithm _backEnd = new Algorithm();
 
   void _showSnackBar() {
     if (globals.isConnected == true) {
@@ -40,17 +65,13 @@ class MainPageState extends State<MainPage> {
     }
   }
 
-  _update() async {
-    await _backEnd.scan();
-    return globals.devices;
-  }
 
   void _submit() {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
       if (pulse == 1) origin1 = "current location";
-      _backEnd.setPoints(origin1, destination);
+      globals.globalDevice.setPoints(origin1, destination);
     }
   }
 
@@ -212,7 +233,6 @@ class MainPageState extends State<MainPage> {
     //showMap();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    _update();
     return new Scaffold(
       key: _scaffoldstate,
       appBar: AppBar(

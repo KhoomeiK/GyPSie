@@ -6,6 +6,7 @@ import 'globals.dart' as globals;
 import 'vibLevel_page.dart';
 import 'haptic_page.dart';
 import 'tutorial.dart';
+import 'main_page.dart';
 
 class BluetoothPage extends StatefulWidget {
   State createState() => new BluetoothPageState();
@@ -18,7 +19,7 @@ class BluetoothPageState extends State<BluetoothPage> {
   String origin1;
   String destination;
   int upToDate = 0;
-  List<globals.BlueInfo> devices = globals.devices;
+  List<BlueInfo> devices = globals.devices;
   var _mapView = new MapView();
   MainPage2State lol;
   final GlobalKey<ScaffoldState> _scaffoldstate =
@@ -39,7 +40,7 @@ class BluetoothPageState extends State<BluetoothPage> {
     }
   }
 
-  _connect(globals.BlueInfo device) {
+  _connect(BlueInfo device) {
     globals.globalDevice.connect(device.toDevice());
   }
 
@@ -82,7 +83,6 @@ class BluetoothPageState extends State<BluetoothPage> {
   @override
   initState() {
     super.initState();
-    update();
   }
 
   // Widget createListView(BuildContext context, AsyncSnapshot snapshot, ) {
@@ -166,23 +166,6 @@ class BluetoothPageState extends State<BluetoothPage> {
     else
       return globals.devices[index].title;
   }
-// createView(BuildContext context, AsyncSnapshot snapshot ) {
-//     devices = snapshot.data;
-//   return new ListView.builder(
-//         itemCount: devices.length,
-//         itemBuilder: (BuildContext context, i){
-//           return new Column(
-//             children: <Widget>[
-//           new ListTile(
-//             title: new Text(_title(i)),
-//             onTap: (){_connect(devices[i]);},
-//           ),
-//             ],
-//           );
-//         }
-
-//       );
-// }
 
   Widget _buildDrawer() {
     return Drawer(
@@ -316,7 +299,7 @@ class BluetoothPageState extends State<BluetoothPage> {
           elevation: 0.0,
           child: new Icon(Icons.bluetooth_disabled),
           onPressed: () {
-            globals.globalDevice.disconnect();
+            _disconnect();
             __showSnackBar(); //replace lol with connection state         }
           }),
     );
@@ -327,6 +310,4 @@ class BluetoothPageState extends State<BluetoothPage> {
       content: new Text("Disconnected!"),
     ));
   }
-
-  Widget _finalList() {}
 }

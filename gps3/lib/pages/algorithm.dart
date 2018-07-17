@@ -2,7 +2,7 @@ import 'dart:math' as Math;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
-
+import 'main_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:vibrate/vibrate.dart';
 import 'package:location/location.dart' as loc;
@@ -32,7 +32,7 @@ class Algorithm {
     // connect to bluetooth device
     print("scanning to start");
     scanSubscription = blue.scan().listen((scanResult) {
-      globals.BlueInfo d = new globals.BlueInfo(
+      BlueInfo d = new BlueInfo(
           scanResult.device.name, scanResult.device.id.toString());
       // new blueinfo object for device
       if (globals.devices.indexOf(d) == -1)
@@ -49,44 +49,45 @@ class Algorithm {
         scanSubscription.cancel(); // end scan once found device
         globals.isConnected = true;
         mainBand = band;
-        // listServ(); // list device's services
+        globals.devices.clear();
+        listServ(); // list device's services
       }
     });
   }
 
-  // listServ() async { // for testing to view services
-  //   print("listServ");
-  //   List<BluetoothService> services = await mainBand.discoverServices(); // writes available services
-  //   print("service/characteristic info");
-  //   for(var i = 0; i < services.length-1; i++) {
-  //     print(services[i]);
-  //     print(services[i].characteristics);
-  //     print(services[i].characteristics[0]);
-  //   }
-  // }
+  listServ() async { // for testing to view services
+    print("listServ");
+    List<BluetoothService> services = await mainBand.discoverServices(); // writes available services
+    print("service/characteristic info");
+    for(var i = 0; i < services.length-1; i++) {
+      print(services[i]);
+      print(services[i].characteristics);
+      print(services[i].characteristics[0]);
+    }
+  }
 
   transmit(num x, int i) async {
     print("transmit");
     print(mainBand.name);
 
-    print(steps[i]["maneuver"]);
-    print(steps[i]["html_instructions"]);
+    // print(steps[i]["maneuver"]);
+    // print(steps[i]["html_instructions"]);
 
-    String side = "";
-    x = (5 * x) ~/ 100;
+    // String side = "";
+    // x = (5 * x) ~/ 100;
 
-    if (steps[i]["maneuver"].toString().indexOf("left") != -1)
-      side = "left";
-    else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
-      side = "right";
-    else {
-      if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
-        side = "left";
-      else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
-        side = "right";
-      else
-        throw(new Exception(["Could not determine whether to turn right or left"])); // change eventually
-    }
+    // if (steps[i]["maneuver"].toString().indexOf("left") != -1)
+    //   side = "left";
+    // else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
+    //   side = "right";
+    // else {
+    //   if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
+    //     side = "left";
+    //   else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
+    //     side = "right";
+    //   else
+    //     throw(new Exception(["Could not determine whether to turn right or left"])); // change eventually
+    // }
 
     List<BluetoothService> services =
         await mainBand.discoverServices(); // available services
@@ -97,11 +98,12 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    if (side == "right")
-    await mainBand
-        .writeCharacteristic(characteristics[0], [x]); // write to serv1 char0
-    else if (side == "left")
-      await mainBand
+    // if (side == "right")
+    // await mainBand
+    //     .writeCharacteristic(characteristics[0], [x]); // write to serv1 char0
+    // else if (side == "left")
+    //   await 
+    mainBand
           .writeCharacteristic(characteristics[0], [x+100]); // write to serv1 char0
     
     value = await mainBand
