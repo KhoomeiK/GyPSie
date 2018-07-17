@@ -32,8 +32,8 @@ class Algorithm {
     // connect to bluetooth device
     print("scanning to start");
     scanSubscription = blue.scan().listen((scanResult) {
-      BlueInfo d = new BlueInfo(
-          scanResult.device.name, scanResult.device.id.toString());
+      BlueInfo d =
+          new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
       // new blueinfo object for device
       if (globals.devices.indexOf(d) == -1)
         globals.devices.add(d); // only add new devices to list
@@ -55,11 +55,13 @@ class Algorithm {
     });
   }
 
-  listServ() async { // for testing to view services
+  listServ() async {
+    // for testing to view services
     print("listServ");
-    List<BluetoothService> services = await mainBand.discoverServices(); // writes available services
+    List<BluetoothService> services =
+        await mainBand.discoverServices(); // writes available services
     print("service/characteristic info");
-    for(var i = 0; i < services.length-1; i++) {
+    for (var i = 0; i < services.length - 1; i++) {
       print(services[i]);
       print(services[i].characteristics);
       print(services[i].characteristics[0]);
@@ -70,24 +72,26 @@ class Algorithm {
     print("transmit");
     print(mainBand.name);
 
-    // print(steps[i]["maneuver"]);
-    // print(steps[i]["html_instructions"]);
+    print(steps[i]["maneuver"]);
+    print(steps[i]["html_instructions"]);
 
-    // String side = "";
-    // x = (5 * x) ~/ 100;
+    String side = "";
+    var time = (5 * x) ~/ 100;
 
-    // if (steps[i]["maneuver"].toString().indexOf("left") != -1)
-    //   side = "left";
-    // else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
-    //   side = "right";
-    // else {
-    //   if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
-    //     side = "left";
-    //   else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
-    //     side = "right";
-    //   else
-    //     throw(new Exception(["Could not determine whether to turn right or left"])); // change eventually
-    // }
+    if (steps[i]["maneuver"].toString().indexOf("left") != -1)
+      side = "left";
+    else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
+      side = "right";
+    else {
+      if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
+        side = "left";
+      else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
+        side = "right";
+      else
+        throw (new Exception([
+          "Could not determine whether to turn right or left"
+        ])); // change eventually
+    }
 
     List<BluetoothService> services =
         await mainBand.discoverServices(); // available services
@@ -98,14 +102,13 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    // if (side == "right")
-    // await mainBand
-    //     .writeCharacteristic(characteristics[0], [x]); // write to serv1 char0
-    // else if (side == "left")
-    //   await 
-    mainBand
-          .writeCharacteristic(characteristics[0], [x+100]); // write to serv1 char0
-    
+    if (side == "right")
+      await mainBand
+          .writeCharacteristic(characteristics[0], [time]); // write to serv1 char0
+    else if (side == "left")
+      await mainBand.writeCharacteristic(
+          characteristics[0], [time + 100]); // write to serv1 char0
+
     value = await mainBand
         .readCharacteristic(characteristics[0]); // read new serv1 char0
     print(value);
