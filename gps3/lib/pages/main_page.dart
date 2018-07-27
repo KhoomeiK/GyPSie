@@ -12,6 +12,7 @@ import 'vibLevel_page.dart';
 import 'haptic_page.dart';
 import 'tutorial.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'bluetooth_page.dart';
 
 class MainPage extends StatefulWidget {
   State createState() => new MainPageState();
@@ -58,19 +59,26 @@ class MainPageState extends State<MainPage> {
   Algorithm _backEnd = new Algorithm();
 
   void _showSnackBar() {
-    if (globals.isConnected == true) {
       _scaffoldstate.currentState.showSnackBar(new SnackBar(
-        content: new Text("Please fill in required fields"),
+        content: new Text("No Pulse Bands paired!"),
       ));
-    }
   }
-
+  void _showSnackBar2() {
+      _scaffoldstate.currentState.showSnackBar(new SnackBar(
+        content: new Text("Please fill in required fields!"),
+      ));
+  }
 
   void _submit() {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
       if (pulse == 1) origin1 = "current location";
+      if (globals.isConnected==false)
+      _showSnackBar();
+      else if (origin1 == null || destination == null)
+      _showSnackBar2();
+      else
       globals.globalDevice.setPoints(origin1, destination);
     }
   }
@@ -80,6 +88,7 @@ class MainPageState extends State<MainPage> {
       key: formKey,
       child: Column(
         children: <Widget>[
+          SizedBox(height: 10.0),
           TextFormField(
             decoration: new InputDecoration(
                 labelText: "Origin",
@@ -87,7 +96,7 @@ class MainPageState extends State<MainPage> {
             validator: (val) => (val == null) ? 'Empty' : null,
             onSaved: (val) => origin1 = val,
           ),
-          SizedBox(height: 12.0),
+          SizedBox(height: 22.0),
           TextFormField(
             decoration: new InputDecoration(
                 labelText: "Destination",
@@ -103,18 +112,20 @@ class MainPageState extends State<MainPage> {
   Widget _buildButton() {
     return RaisedButton(
       padding: EdgeInsets.all(20.0),
-      elevation: 8.0,
-      child: Text("Go!",
+      elevation: 0.0,
+      child: Text("GO",
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontFamily: "Rajdhani",
               color: Colors.white,
-              fontSize: 20.0)),
+              fontSize: 25.0)),
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
       onPressed: () {
         _submit();
-        if ((pulse == 0 && origin1 == '') || destination == "")
-          _showSnackBar();
+        if (globals.isConnected==false)
+      _showSnackBar();
+      else if (origin1 == null || destination == null)
+      _showSnackBar2();
         else
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MapsPage()));
@@ -145,30 +156,35 @@ class MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildBottomNav() {
+   Widget _buildBottomNav() {
     return new BottomNavigationBar(
       currentIndex: 1,
       onTap: (index) {
         this.index = index;
-        if (index == 1) {
+        if (index == 0) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MainPage2()));
+        }
+        if (index == 2) {
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BluetoothPage())
+          );
         }
       },
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.access_time),
-          title: new Text("Recents"),
+          icon: new Icon(Icons.home),
+          title: new Text("Home"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.accessibility),
+          icon: new Icon(Icons.navigation),
           title:
-              new Text("Device", style: TextStyle(fontWeight: FontWeight.bold)),
+              new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.account_box),
-          title: new Text("Profile"),
-        )
+          icon: new Icon(Icons.bluetooth),
+          title: new Text("Bluetooth"),
+        ),
       ],
     );
   }
@@ -249,10 +265,8 @@ class MainPageState extends State<MainPage> {
               padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
               child: GestureDetector(
                 onTap: () {},
-                child: Icon(Icons.battery_full),
+                child: Icon(Icons.account_box),
               )),
-          SizedBox(width: 9.0),
-          new Icon(Icons.bluetooth),
           SizedBox(width: 17.0),
         ],
       ),
@@ -260,12 +274,13 @@ class MainPageState extends State<MainPage> {
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
+            _connectionState(),
+            SizedBox(height: 9.0),
             _buildForm(),
             SizedBox(height: 9.0),
             _buildSwitch(),
-            SizedBox(height: 9.0),
+            SizedBox(height: 19.0),
             _buildButton(),
-            SizedBox(height: 25.0),
             // _buildButton2(),
             Flex(
               direction: Axis.vertical,
@@ -278,4 +293,20 @@ class MainPageState extends State<MainPage> {
       bottomNavigationBar: _buildBottomNav(),
     );
   }
+    _connectionState() {
+    if (globals.isConnected == true)
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Bluetooth: "),
+          Text("Connected", style: TextStyle(color: Colors.green)),
+        ]);
+    else
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text("Bluetooth: "),
+          Text("Disconnected", style: TextStyle(color: Colors.red)),
+        ]);
+}
 }

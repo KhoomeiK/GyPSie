@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'algorithm.dart';
 import 'main_page2.dart';
+import 'main_page.dart';
 import 'globals.dart' as globals;
+import 'bluetooth_page.dart';
 
 class TutorialPage extends StatefulWidget {
   State createState() => new TutorialPageState();
@@ -29,11 +31,9 @@ class TutorialPageState extends State<TutorialPage> {
               padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
               child: GestureDetector(
                 onTap: () {},
-                child: Icon(Icons.battery_full),
+                child: Icon(Icons.account_box),
               )),
-          SizedBox(width: 9.0),
-          new Icon(Icons.bluetooth),
-          SizedBox(width: 17.0),
+              SizedBox(width: 17.0),
         ],
       ),
       body: Container(
@@ -103,30 +103,38 @@ class TutorialPageState extends State<TutorialPage> {
   //   });
   // }
 
-  Widget _buildBottomNav() {
+    Widget _buildBottomNav() {
     return new BottomNavigationBar(
-      currentIndex: 1,
       onTap: (index) {
         this.index = index;
-        if (index == 1) {
+        if (index == 0) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MainPage2()));
+        }
+        if (index == 1) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainPage()));
+        }
+        if (index == 2) {
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BluetoothPage())
+          );
         }
       },
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.access_time),
-          title: new Text("Recents"),
+          icon: new Icon(Icons.home),
+          title: new Text("Home"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.accessibility),
+          icon: new Icon(Icons.navigation),
           title:
-              new Text("Device", style: TextStyle(fontWeight: FontWeight.bold)),
+              new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.account_box),
-          title: new Text("Profile"),
-        )
+          icon: new Icon(Icons.bluetooth),
+          title: new Text("Bluetooth"),
+        ),
       ],
     );
   }

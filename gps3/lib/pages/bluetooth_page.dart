@@ -42,35 +42,41 @@ class BluetoothPageState extends State<BluetoothPage> {
 
   _connect(BlueInfo device) {
     globals.globalDevice.connect(device.toDevice());
+    _showSnackBar();
   }
 
   _disconnect() {
     globals.globalDevice.disconnect();
   }
 
-  Widget _buildBottomNav() {
+    Widget _buildBottomNav() {
     return new BottomNavigationBar(
-      currentIndex: 1,
+      type: BottomNavigationBarType.fixed,
+      currentIndex: 2,
       onTap: (index) {
         this.index = index;
-        if (index == 1) {
+        if (index == 0) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MainPage2()));
+        }
+        if (index == 1) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainPage()));
         }
       },
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.access_time),
-          title: new Text("Recents"),
+          icon: new Icon(Icons.home),
+          title: new Text("Home"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.accessibility),
+          icon: new Icon(Icons.navigation),
           title:
-              new Text("Device", style: TextStyle(fontWeight: FontWeight.bold)),
+              new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.account_box),
-          title: new Text("Profile"),
+          icon: new Icon(Icons.bluetooth),
+          title: new Text("Bluetooth"),
         )
       ],
     );
@@ -237,15 +243,13 @@ class BluetoothPageState extends State<BluetoothPage> {
                     fontSize: 25.0)),
             padding: const EdgeInsets.only(left: 0.0)),
         actions: <Widget>[
-          Container(
-              padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.battery_full),
-              )),
-          SizedBox(width: 9.0),
-          new Icon(Icons.bluetooth),
-          SizedBox(width: 17.0),
+          // Container(
+          //     padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
+          //     child: GestureDetector(
+          //       onTap: () {},
+          //       child: Icon(Icons.battery_full),
+          //     )),
+          SizedBox(width: 25.0),
           new FutureBuilder(
               future: update(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -260,6 +264,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                       return createListView(context, snapshot);
                 }
               }),
+              SizedBox(width: 10.0),
         ],
       ),
       body: new FutureBuilder(
@@ -284,7 +289,6 @@ class BluetoothPageState extends State<BluetoothPage> {
                                 onTap: () {
                                   print(globals.devices[i]);
                                   _connect(globals.devices[i]);
-                                  _showSnackBar();
                                 }),
                           ],
                         );

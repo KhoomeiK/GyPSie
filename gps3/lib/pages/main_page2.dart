@@ -62,32 +62,35 @@ class MainPage2State extends State<MainPage2> {
     }
   }
 
-  Widget _buildBottomNav() {
+   Widget _buildBottomNav() {
     return new BottomNavigationBar(
-      currentIndex: 1,
+      currentIndex: 0,
       onTap: (index) {
-        setState(() {
-          this.index = index;
-          if (index == 1) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MainPage()));
-          }
-        });
+        this.index = index;
+        if (index == 1) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainPage()));
+        }
+        if (index == 2) {
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BluetoothPage())
+          );
+        }
       },
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.access_time),
-          title: new Text("Recents"),
+          icon: new Icon(Icons.home),
+          title: new Text("Home"),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title: new Text("Navigation",
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          title:
+              new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
-          icon: new Icon(Icons.account_box),
-          title: new Text("Profile"),
-        )
+          icon: new Icon(Icons.bluetooth),
+          title: new Text("Bluetooth"),
+        ),
       ],
     );
   }
@@ -205,18 +208,17 @@ class MainPage2State extends State<MainPage2> {
               padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
               child: GestureDetector(
                 onTap: () {},
-                child: Icon(Icons.battery_full),
+                child: Icon(Icons.account_box),
               )),
-          SizedBox(width: 9.0),
-          new Icon(Icons.bluetooth),
+
           SizedBox(width: 17.0),
-          SizedBox(width: 5.0),
         ],
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: <Widget>[
+            SizedBox(height: 30.0),
             Row(children: <Widget>[
               SizedBox(height: 25.0),
               new Expanded(
@@ -228,20 +230,20 @@ class MainPage2State extends State<MainPage2> {
               SizedBox(height: 25.0),
             ]),
             SizedBox(height: 30.0),
-            new Text("Ryan's Pulse Bands",
+            new Text("Welcome, Ryan",
                 style: new TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: "Rajdhani",
                     fontStyle: FontStyle.normal,
                     fontSize: 25.0)),
             //  _bandName(),
-            SizedBox(height: 20.0),
-            new Text("Status: ON",
-                style: new TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontFamily: "Rajdhani",
-                    fontStyle: FontStyle.normal,
-                    fontSize: 20.0)),
+            // SizedBox(height: 20.0),
+            // new Text("Status: ON",
+            //     style: new TextStyle(
+            //         fontWeight: FontWeight.normal,
+            //         fontFamily: "Rajdhani",
+            //         fontStyle: FontStyle.normal,
+            //         fontSize: 20.0)),
             SizedBox(height: 20.0),
             new Text(_connectionState(),
                 style: new TextStyle(
@@ -258,13 +260,13 @@ class MainPage2State extends State<MainPage2> {
       ),
       drawer: _buildDrawer(),
       bottomNavigationBar: _buildBottomNav(),
-      floatingActionButton: new FloatingActionButton(
-          elevation: 0.0,
-          child: new Icon(Icons.bluetooth),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => BluetoothPage()));
-          }),
+      // floatingActionButton: new FloatingActionButton(
+      //     elevation: 0.0,
+      //     child: new Icon(Icons.bluetooth),
+      //     onPressed: () {
+      //       Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) => BluetoothPage()));
+      //     }),
     );
   }
 

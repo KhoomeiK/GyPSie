@@ -55,6 +55,11 @@ class Algorithm {
     });
   }
 
+  // checkConnection()
+  // {
+  //   if 
+  // }
+
   listServ() async {
     // for testing to view services
     print("listServ");
@@ -70,28 +75,28 @@ class Algorithm {
 
   transmit(num x, int i) async {
     print("transmit");
-    print(mainBand.name);
+    // print(mainBand.name);
 
-    print(steps[i]["maneuver"]);
-    print(steps[i]["html_instructions"]);
+    // print(steps[i]["maneuver"]);
+    // print(steps[i]["html_instructions"]);
 
-    String side = "";
-    var time = (5 * x) ~/ 100;
+    // String side = "";
+    // var time = (5 * x) ~/ 100;
 
-    if (steps[i]["maneuver"].toString().indexOf("left") != -1)
-      side = "left";
-    else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
-      side = "right";
-    else {
-      if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
-        side = "left";
-      else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
-        side = "right";
-      else
-        throw (new Exception([
-          "Could not determine whether to turn right or left"
-        ])); // change eventually
-    }
+    // if (steps[i]["maneuver"].toString().indexOf("left") != -1)
+    //   side = "left";
+    // else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
+    //   side = "right";
+    // else {
+    //   if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
+    //     side = "left";
+    //   else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
+    //     side = "right";
+    //   else
+    //     throw (new Exception([
+    //       "Could not determine whether to turn right or left"
+    //     ])); // change eventually
+    // }
 
     List<BluetoothService> services =
         await mainBand.discoverServices(); // available services
@@ -102,12 +107,12 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    if (side == "right")
+    // if (side == "right")
       await mainBand
-          .writeCharacteristic(characteristics[0], [time]); // write to serv1 char0
-    else if (side == "left")
-      await mainBand.writeCharacteristic(
-          characteristics[0], [time + 100]); // write to serv1 char0
+          .writeCharacteristic(characteristics[0], [18]); // write to serv1 char0
+    // else if (side == "left")
+      // await mainBand.writeCharacteristic(
+      //     characteristics[0], [time + 100]); // write to serv1 char0
 
     value = await mainBand
         .readCharacteristic(characteristics[0]); // read new serv1 char0

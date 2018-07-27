@@ -43,8 +43,8 @@ class _MapsPageState extends State<MapsPage> {
           initialCameraPosition:
               new CameraPosition(new Location(37.7749, -122.4194), 15.0),
           showUserLocation: true,
-          title: "Have a Safe Journey!"),
-      toolbarActions: [new ToolbarAction("End Route", 2)],
+          title: "Proceed to the First Waypoint"),
+      toolbarActions: [new ToolbarAction("End", 2)],
     );
     mapView.setMarkers(globals.markers);
     mapView.zoomToFit(padding: 100);
@@ -82,7 +82,12 @@ class _MapsPageState extends State<MapsPage> {
     return new Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text("Pulse Directions"),
+        title: new Text("Navigation",
+                style: new TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: "Rajdhani",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 25.0)),
       ),
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
