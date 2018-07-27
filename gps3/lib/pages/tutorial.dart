@@ -84,8 +84,7 @@ class TutorialPageState extends State<TutorialPage> {
                         fontSize: 20.0)),
                 shape: RoundedRectangleBorder(borderRadius: _borderRadius),
                 onPressed: () {
-                  //rohan put ur shit here
-                },
+                  globals.globalDevice.transmit(200, 1);},
                 color: Colors.lightBlue,
                 splashColor: Colors.blue,
               )
