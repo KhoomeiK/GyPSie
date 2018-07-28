@@ -69,7 +69,6 @@ class TutorialPageState extends State<TutorialPage> {
                 onPressed: () {
                   // globals.globalDevice.transmit(200, 0);
                   globals.globalDevice.transmitTestLeft();
-
                 },
                 color: Colors.lightBlue,
                 splashColor: Colors.blue,

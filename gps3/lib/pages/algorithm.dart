@@ -83,8 +83,8 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    await mainBand.writeCharacteristic(
-          characteristics[0], [0]); // write to serv1 char0
+    await mainBand
+        .writeCharacteristic(characteristics[0], [0]); // write to serv1 char0
   }
 
   transmitTestRight() async {
@@ -97,39 +97,13 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    await mainBand.writeCharacteristic(
-          characteristics[0], [1]); // write to serv1 char0
+    await mainBand
+        .writeCharacteristic(characteristics[0], [100]); // write to serv1 char0
   }
 
-
-  transmit(num x, int i) async {
+  transmit(num dis, int i) async {
     print("transmit");
     print(mainBand.name);
-
-    steps = [
-      {"maneuver": "left", "html_instructions": "left"},
-      {"maneuver": "right", "html_instructions": "right"}
-    ];
-
-    print(steps[i]["maneuver"]);
-    print(steps[i]["html_instructions"]);
-
-    String side = "";
-    var time = (5 * x) ~/ 200; //4-0
-
-    if (steps[i]["maneuver"].toString().indexOf("left") != -1)
-      side = "left";
-    else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
-      side = "right";
-    else {
-      if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
-        side = "left";
-      else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
-        side = "right";
-      else
-        throw new Exception(
-            "Could not determine whether to turn right or left"); // change eventually
-    }
 
     List<BluetoothService> services =
         await mainBand.discoverServices(); // available services
@@ -140,13 +114,50 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    if (side == "right")
-      await mainBand.writeCharacteristic(
-          characteristics[0], [time + 100]); // write to serv1 char0
-    else if (side == "left")
-      await mainBand.writeCharacteristic(
-          characteristics[0], [time]); // write to serv1 char0
+    int val = 0;
+    String side = "";
+    side = determineSide(i);
+    print(side);
 
+    if (side == "right") {
+      // stop = 51
+      if (dis <= 200 && dis >= 160)
+        val = 104;
+      else if (dis <= 159 && dis >= 120)
+        val = 103;
+      else if (dis <= 119 && dis >= 80)
+        val = 102;
+      else if (dis <= 79 && dis >= 40)
+        val = 101;
+      else if (dis <= 39 && dis >= 10)
+        val = 100;
+      else if (dis < 10)
+        val = 18;
+      } // write to serv1 char0
+    else if (side == "left") {
+      // stop = 15
+      if (dis <= 200 && dis >= 160)
+        val = 4;
+      else if (dis <= 159 && dis >= 120)
+        val = 3;
+      else if (dis <= 119 && dis >= 80)
+        val = 2;
+      else if (dis <= 79 && dis >= 40)
+        val = 1;
+      else if (dis <= 39 && dis >= 10)
+        val = 0;
+      else if (dis < 10)
+        val = 17;
+    }
+    else {
+      val = 17;
+    }
+    print("value:");
+    print(val);
+
+    await mainBand
+        .writeCharacteristic(characteristics[0], [val]); // write to serv1 char0
+    print("wrote characteristic val");
     value = await mainBand
         .readCharacteristic(characteristics[0]); // read new serv1 char0
     print(value);
@@ -155,6 +166,69 @@ class Algorithm {
   disconnect() async {
     deviceConnection.cancel(); // end device BT connection
     globals.isConnected = false;
+  }
+
+  getData() async {
+    resp = await http.get(link); // gets from api
+    resp = json.decode(resp.body); // parses json
+  }
+
+  getLoc() async {
+    // gets current location
+    return await loc.Location().getLocation;
+  }
+
+  toRadians(deg) {
+    // convert degree to radians for dist function
+    return deg * Math.pi / 180;
+  } 
+
+  // convert below to stream
+  dist(lat2, lon2) async {
+    // calculates distance between current location and given point as crow flies
+    var cur = await getLoc(); // gets current location
+
+    var lat1 = cur["latitude"]; // lat
+    var lon1 = cur["longitude"]; // lon
+
+    var R = 6371e3; // radius of earth
+    var la1 = toRadians(lat1); // some math shit
+    var la2 = toRadians(lat2);
+    var ladif = toRadians(lat2 - lat1);
+    var lodif = toRadians(lon2 - lon1);
+
+    var a = Math.sin(ladif / 2) * Math.sin(ladif / 2) +
+        Math.cos(la1) *
+            Math.cos(la2) *
+            Math.sin(lodif / 2) *
+            Math.sin(lodif / 2); // more math shit
+
+    var c =
+        2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // even more math shit
+
+    var d = R * c; // what we want
+
+    return d; // distance between (lat1, lon1) (current location) and (lat2, lon2) (given point)
+  }
+
+  determineSide(int i) {
+    print("determining side");
+    String side = "";
+    if (steps[i]["maneuver"].toString().indexOf("left") != -1)
+      side = "left";
+    else if (steps[i]["maneuver"].toString().indexOf("right") != -1)
+      side = "right";
+    else {
+      if (steps[i]["html_instructions"].toString().indexOf("left") != -1)
+        side = "left";
+      else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
+        side = "right";
+      else
+        Vibrate.vibrate();
+        // throw new Exception(
+        //     "Could not determine whether to turn right or left"); // change eventually
+    }
+    return side;
   }
 
   setPoints(String origin, String dest) async {
@@ -196,11 +270,11 @@ class Algorithm {
   }
 
   loop() async {
-    // for (var step in steps) {
-    //   // prints maneuver for each step
-    //   print(step["maneuver"]);
-    //   print(step["html_instructions"]);
-    // }
+    for (var step in steps) {
+      // prints maneuver for each step
+      print(step["maneuver"]);
+      print(step["html_instructions"]);
+    }
 
     print(await getLoc());
     print(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]));
@@ -209,11 +283,14 @@ class Algorithm {
 
     // var x = dist(legs["end_location"]["lat"], legs["end_location"]["lng"]);
     // convert below to event listener
+    print("starting while");
     while (
         await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]) >
             15) {
+      print(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]));
       // while not arrived at final destination
       globals.next = steps[i]["html_instructions"]; // next step
+      print(globals.next);
       num dis = await dist(
           steps[i]["end_location"]["lat"],
           steps[i]["end_location"]
@@ -222,68 +299,21 @@ class Algorithm {
 
       if (globals.canceled) {
         globals.markers.clear();
+        print("canceled");
         return "You have canceled your trip";
       }
 
-      if (dis <= 200 && dis >= 10) {
-        // if within 200m of waypoint
-        globals.globalDevice.transmit(dis, i);
-      } else if (dis < 10) {
-        // once past the waypoint
-        while (await dist(steps[i]["end_location"]["lat"],
-                steps[i]["end_location"]["lng"]) <
-            10) {
-          globals.globalDevice.transmit(0, i);
-        }
-        i++; // go to next step
+      if (dis < 200) {
+        print("transmit func start");
+        await transmit(dis, i);
+        print("transmit func fin");
+        if (dis < 10)
+          i++; // go to next step
       }
-
       sleep(const Duration(seconds: 3)); // sleeps for 3 seconds between loop
+      print(i);
     }
-
+    print("loop ended");
     return "You have arrived at your destination"; // once dist < 15, arrived at destination
-  }
-
-  getData() async {
-    resp = await http.get(link); // gets from api
-    resp = json.decode(resp.body); // parses json
-  }
-
-  getLoc() async {
-    // gets current location
-    return await loc.Location().getLocation;
-  }
-
-  toRadians(deg) {
-    // convert degree to radians for dist function
-    return deg * Math.pi / 180;
-  }
-
-  // convert below to stream
-  dist(lat2, lon2) async {
-    // calculates distance between current location and given point as crow flies
-    var cur = await getLoc(); // gets current location
-
-    var lat1 = cur["latitude"]; // lat
-    var lon1 = cur["longitude"]; // lon
-
-    var R = 6371e3; // radius of earth
-    var la1 = toRadians(lat1); // some math shit
-    var la2 = toRadians(lat2);
-    var ladif = toRadians(lat2 - lat1);
-    var lodif = toRadians(lon2 - lon1);
-
-    var a = Math.sin(ladif / 2) * Math.sin(ladif / 2) +
-        Math.cos(la1) *
-            Math.cos(la2) *
-            Math.sin(lodif / 2) *
-            Math.sin(lodif / 2); // more math shit
-
-    var c =
-        2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // even more math shit
-
-    var d = R * c; // what we want
-
-    return d; // distance between (lat1, lon1) (current location) and (lat2, lon2) (given point)
   }
 }
