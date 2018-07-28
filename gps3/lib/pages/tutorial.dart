@@ -67,7 +67,9 @@ class TutorialPageState extends State<TutorialPage> {
                         fontSize: 20.0)),
                 shape: RoundedRectangleBorder(borderRadius: _borderRadius),
                 onPressed: () {
-                  globals.globalDevice.transmit(2, 0);
+                  // globals.globalDevice.transmit(200, 0);
+                  globals.globalDevice.transmitTestLeft();
+
                 },
                 color: Colors.lightBlue,
                 splashColor: Colors.blue,
@@ -84,7 +86,9 @@ class TutorialPageState extends State<TutorialPage> {
                         fontSize: 20.0)),
                 shape: RoundedRectangleBorder(borderRadius: _borderRadius),
                 onPressed: () {
-                  globals.globalDevice.transmit(200, 1);},
+                  // globals.globalDevice.transmit(200, 1);
+                  globals.globalDevice.transmitTestRight();
+                  },
                 color: Colors.lightBlue,
                 splashColor: Colors.blue,
               )

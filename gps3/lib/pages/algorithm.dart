@@ -57,7 +57,7 @@ class Algorithm {
 
   // checkConnection()
   // {
-  //   if 
+  //   if
   // }
 
   listServ() async {
@@ -73,19 +73,42 @@ class Algorithm {
     }
   }
 
+  transmitTestLeft() async {
+    List<BluetoothService> services =
+        await mainBand.discoverServices(); // available services
+    List<BluetoothCharacteristic> characteristics =
+        services[1].characteristics; // chars for service 1
+
+    List<int> value = await mainBand
+        .readCharacteristic(characteristics[0]); // read serv1 char0
+    print(value);
+
+    await mainBand.writeCharacteristic(
+          characteristics[0], [0]); // write to serv1 char0
+  }
+
+  transmitTestRight() async {
+    List<BluetoothService> services =
+        await mainBand.discoverServices(); // available services
+    List<BluetoothCharacteristic> characteristics =
+        services[1].characteristics; // chars for service 1
+
+    List<int> value = await mainBand
+        .readCharacteristic(characteristics[0]); // read serv1 char0
+    print(value);
+
+    await mainBand.writeCharacteristic(
+          characteristics[0], [1]); // write to serv1 char0
+  }
+
+
   transmit(num x, int i) async {
     print("transmit");
     print(mainBand.name);
 
     steps = [
-      {
-        "maneuver": "left",
-        "html_instructions": "left"
-      },
-      {
-        "maneuver": "right",
-        "html_instructions": "right"
-      }
+      {"maneuver": "left", "html_instructions": "left"},
+      {"maneuver": "right", "html_instructions": "right"}
     ];
 
     print(steps[i]["maneuver"]);
@@ -104,9 +127,8 @@ class Algorithm {
       else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
         side = "right";
       else
-        throw (new Exception([
-          "Could not determine whether to turn right or left"
-        ])); // change eventually
+        throw new Exception(
+            "Could not determine whether to turn right or left"); // change eventually
     }
 
     List<BluetoothService> services =
@@ -119,11 +141,11 @@ class Algorithm {
     print(value);
 
     if (side == "right")
-      await mainBand
-          .writeCharacteristic(characteristics[0], [18]); // write to serv1 char0
-    else if (side == "left")
       await mainBand.writeCharacteristic(
           characteristics[0], [time + 100]); // write to serv1 char0
+    else if (side == "left")
+      await mainBand.writeCharacteristic(
+          characteristics[0], [18]); // write to serv1 char0
 
     value = await mainBand
         .readCharacteristic(characteristics[0]); // read new serv1 char0
