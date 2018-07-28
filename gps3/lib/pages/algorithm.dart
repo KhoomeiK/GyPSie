@@ -115,7 +115,7 @@ class Algorithm {
     print(steps[i]["html_instructions"]);
 
     String side = "";
-    var time = (5 * x) ~/ 100;
+    var time = (5 * x) ~/ 200; //4-0
 
     if (steps[i]["maneuver"].toString().indexOf("left") != -1)
       side = "left";
@@ -145,7 +145,7 @@ class Algorithm {
           characteristics[0], [time + 100]); // write to serv1 char0
     else if (side == "left")
       await mainBand.writeCharacteristic(
-          characteristics[0], [18]); // write to serv1 char0
+          characteristics[0], [time]); // write to serv1 char0
 
     value = await mainBand
         .readCharacteristic(characteristics[0]); // read new serv1 char0
