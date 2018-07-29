@@ -17,3 +17,4 @@ List<Marker> markers = <Marker>[];
 String next;
 String dest;
 
+String travelMode = "BICYCLING";

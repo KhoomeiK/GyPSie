@@ -4,7 +4,6 @@ void setup() {
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH);
-  //  Serial.begin(115200);
   Serial.begin(9600);
 
   vw_setup(2000);
