@@ -258,14 +258,19 @@ class Algorithm {
 
     for (int i = 0; i < steps.length; i++) {
       // add markers for each waypoint up to destination
-      globals.markers.add(new Marker(i.toString(), "Waypoint",
-          steps[i]["start_location"]["lat"], steps[i]["start_location"]["lng"],
-          color: Colors.cyan));
-
-      if (i == steps.length - 1)
+      if (i == 0)
+        globals.markers.add(new Marker(i.toString(), dest,
+            steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"],
+            color: Colors.green));
+      else if (i == steps.length - 1)
         globals.markers.add(new Marker(i.toString(), dest,
             steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"],
             color: Colors.red));
+      else
+        globals.markers.add(new Marker(i.toString(), "Waypoint",
+            steps[i]["start_location"]["lat"], steps[i]["start_location"]["lng"],
+            color: Colors.cyan));
+
     }
     loop();
   }
