@@ -103,11 +103,6 @@ class Algorithm {
     });
   }
 
-  // checkConnection()
-  // {
-  //   if
-  // }
-
   listServ() async {
     // for testing to view services
     print("listServ");
@@ -168,34 +163,6 @@ class Algorithm {
     String side = "";
     side = determineSide(i);
     print(side);
-    // left doesnt stop buzzing, maybe just lag tho for this
-    // right doesnt stop buzzing even when dis = 500, need to send stop message
-
-   /*
-   RangeError (index): Invalid value: Not in range 0..3, inclusive: 4
-#0      List.[] (dart:core/runtime/libgrowable_array.dart:141:60)
-#1      Algorithm.loop (file:///Users/ryanwang/Documents/GyPSie/gps3/lib/pages/algorithm.dart:299:27)
-<asynchronous suspension>
-#2      Algorithm.setPoints (file:///Users/ryanwang/Documents/GyPSie/gps3/lib/pages/algorithm.dart:275:5)
-<asynchronous suspension>
-#3      MainPageState._submit (file:///Users/ryanwang/Documents/GyPSie/gps3/lib/pages/main_page.dart:82:28)
-#4      MainPageState._buildButton.<anonymous closure> (file:///Users/ryanwang/Documents/GyPSie/gps3/lib/pages/main_page.dart:124:9)
-#5      _InkResponseState._handleTap (package:flutter/src/material/ink_well.dart:494:14)
-#6      _InkResponseState.build.<anonymous closure> (package:flutter/src/material/ink_well.dart:549:30)
-#7      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:102:24)
-#8      TapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:161:9)
-#9      TapGestureRecognizer.handlePrimaryPointer (package:flutter/src/gestures/tap.dart:94:7)
-#10     PrimaryPointerGestureRecognizer.handleEvent (package:flutter/src/gestures/recognizer.dart:315:9)
-#11     PointerRouter._dispatch (package:flutter/src/gestures/pointer_router.dart:73:12)
-#12     PointerRouter.route (package:flutter/src/gestures/pointer_router.dart:101:11)
-#13     _WidgetsFlutterBinding&BindingBase&GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:143:19)
-#14     _WidgetsFlutterBinding&BindingBase&GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:121:22)
-#15     _WidgetsFlutterBinding&BindingBase&GestureBinding._handlePointerEvent (package:flutter/src/gestures/binding.dart:101:7)
-#16     _WidgetsFlutterBinding&BindingBase&GestureBinding._flushPointerEventQueue (package:flutter/src/gestures/binding.dart:64:7)
-#17     _WidgetsFlutterBinding&BindingBase&GestureBinding._handlePointerDataPacket (package:flutter/src/gestures/binding.dart:48:7)
-#18     _invoke1 (dart:ui/hooks.dart:134:13)
-#19     _dispatchPointerDataPacket (dart:ui/hooks.dart:91:5)
-*/ 
     if (side == "right") {
       if (dis > 200)
         val = 51;
@@ -363,14 +330,14 @@ class Algorithm {
 
     int i = 1; // current step that user is on
 
-    // var x = dist(legs["end_location"]["lat"], legs["end_location"]["lng"]);
     // convert below to event listener
     print("starting while");
     while (
         await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]) >
-            15) {
+            30) {
       // while not arrived at final destination
       print(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"])); // distance to final destination
+
       globals.next = steps[i]["html_instructions"]; // next step
       print(globals.next);
       num dis = await dist(
@@ -388,8 +355,12 @@ class Algorithm {
         print("transmit func start");
         await transmit(dis, i);
         print("transmit func fin");
-        if (dis < 30)
+        if (dis < 30) {
           i++; // go to next step
+          if (i == steps.length)
+            print('${steps[--i]["html_instructions"]}');
+          transmit(205, i);
+        }
       }
       print("step $i");
       sleep(const Duration(seconds: 1)); // sleeps for 3 seconds between loop
