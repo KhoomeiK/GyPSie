@@ -105,6 +105,8 @@ class Algorithm {
     print("transmit");
     print(mainBand.name);
 
+    print("BLUETOOTH READ-----------------------------------------");
+
     List<BluetoothService> services =
         await mainBand.discoverServices(); // available services
     List<BluetoothCharacteristic> characteristics =
@@ -113,14 +115,16 @@ class Algorithm {
     List<int> value = await mainBand
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
-
+    
+    print("WHICH SIDE-----------------------------------------");
     int val = 0;
     String side = "";
     side = determineSide(i);
     print(side);
 
     if (side == "right") {
-      // stop = 51
+      if (dis > 200)
+        val = 51;
       if (dis <= 200 && dis >= 160)
         val = 104;
       else if (dis <= 159 && dis >= 120)
@@ -135,7 +139,8 @@ class Algorithm {
         val = 18;
       } // write to serv1 char0
     else if (side == "left") {
-      // stop = 15
+      if (dis > 200)
+        val = 15;
       if (dis <= 200 && dis >= 160)
         val = 4;
       else if (dis <= 159 && dis >= 120)
@@ -150,11 +155,13 @@ class Algorithm {
         val = 17;
     }
     else {
-      val = 17;
+      val = 15;
     }
+
     print("value:");
     print(val);
-
+    
+    print("BLUETOOTH WRITE-----------------------------------------");
     await mainBand
         .writeCharacteristic(characteristics[0], [val]); // write to serv1 char0
     print("wrote characteristic val");
@@ -223,10 +230,10 @@ class Algorithm {
         side = "left";
       else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
         side = "right";
-      else
+      else {
+        print("Could not determine whether to turn right or left"); // change eventually
         Vibrate.vibrate();
-        // throw new Exception(
-        //     "Could not determine whether to turn right or left"); // change eventually
+      }
     }
     return side;
   }
@@ -279,7 +286,7 @@ class Algorithm {
     print(await getLoc());
     print(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]));
 
-    int i = 0; // current step that user is on
+    int i = 1; // current step that user is on
 
     // var x = dist(legs["end_location"]["lat"], legs["end_location"]["lng"]);
     // convert below to event listener
@@ -292,9 +299,8 @@ class Algorithm {
       globals.next = steps[i]["html_instructions"]; // next step
       print(globals.next);
       num dis = await dist(
-          steps[i]["end_location"]["lat"],
-          steps[i]["end_location"]
-              ["lng"]); // distance between cur and next waypoint
+          steps[i]["start_location"]["lat"],
+          steps[i]["start_location"]["lng"]); // distance between cur and next waypoint
       print(dis);
 
       if (globals.canceled) {
@@ -310,8 +316,8 @@ class Algorithm {
         if (dis < 10)
           i++; // go to next step
       }
-      sleep(const Duration(seconds: 3)); // sleeps for 3 seconds between loop
       print(i);
+      sleep(const Duration(seconds: 3)); // sleeps for 3 seconds between loop
     }
     print("loop ended");
     return "You have arrived at your destination"; // once dist < 15, arrived at destination
