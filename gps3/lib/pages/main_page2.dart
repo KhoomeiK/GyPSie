@@ -62,7 +62,7 @@ class MainPage2State extends State<MainPage2> {
     }
   }
 
-   Widget _buildBottomNav() {
+  Widget _buildBottomNav() {
     return new BottomNavigationBar(
       currentIndex: 0,
       onTap: (index) {
@@ -72,9 +72,8 @@ class MainPage2State extends State<MainPage2> {
               context, MaterialPageRoute(builder: (context) => MainPage()));
         }
         if (index == 2) {
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BluetoothPage())
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BluetoothPage()));
         }
       },
       items: <BottomNavigationBarItem>[
@@ -84,8 +83,7 @@ class MainPage2State extends State<MainPage2> {
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title:
-              new Text("Navigation"),
+          title: new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.bluetooth),
@@ -210,7 +208,6 @@ class MainPage2State extends State<MainPage2> {
                 onTap: () {},
                 child: Icon(Icons.account_box),
               )),
-
           SizedBox(width: 17.0),
         ],
       ),
@@ -288,5 +285,4 @@ class MainPage2State extends State<MainPage2> {
   _batterylevel() {
     return Image.asset('assets/battery.png', fit: BoxFit.cover);
   }
-
 }

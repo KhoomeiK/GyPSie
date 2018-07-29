@@ -83,11 +83,11 @@ class _MapsPageState extends State<MapsPage> {
       key: scaffoldKey,
       appBar: AppBar(
         title: new Text("Navigation",
-                style: new TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontFamily: "Rajdhani",
-                    fontStyle: FontStyle.normal,
-                    fontSize: 25.0)),
+            style: new TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: "Rajdhani",
+                fontStyle: FontStyle.normal,
+                fontSize: 25.0)),
       ),
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.start,

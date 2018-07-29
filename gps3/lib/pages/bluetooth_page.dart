@@ -19,15 +19,16 @@ class BluetoothPageState extends State<BluetoothPage> {
   String origin1;
   String destination;
   int upToDate = 0;
-  List<BlueInfo> devices = globals.devices;
   var _mapView = new MapView();
   MainPage2State lol;
   final GlobalKey<ScaffoldState> _scaffoldstate =
       new GlobalKey<ScaffoldState>();
+  int i = 0;
 
   update() async {
     await globals.globalDevice.scan();
-    print(globals.devices);
+    // print(globals.devices);
+    print(i);
     return globals.devices;
     // await new Future.delayed(new Duration(seconds: 3));
   }
@@ -49,7 +50,7 @@ class BluetoothPageState extends State<BluetoothPage> {
     globals.globalDevice.disconnect();
   }
 
-    Widget _buildBottomNav() {
+  Widget _buildBottomNav() {
     return new BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: 2,
@@ -71,8 +72,7 @@ class BluetoothPageState extends State<BluetoothPage> {
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title:
-              new Text("Navigation"),
+          title: new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.bluetooth),
@@ -160,6 +160,7 @@ class BluetoothPageState extends State<BluetoothPage> {
       icon: new Icon(Icons.refresh),
       onPressed: () {
         update();
+        print(globals.devices);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => BluetoothPage()));
       },
@@ -256,7 +257,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
-                    return new Icon(Icons.bluetooth_searching);
+                    return CircularProgressIndicator();
                   default:
                     if (snapshot.hasError)
                       return new Text('Error: ${snapshot.error}');
@@ -264,7 +265,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                       return createListView(context, snapshot);
                 }
               }),
-              SizedBox(width: 10.0),
+          SizedBox(width: 10.0),
         ],
       ),
       body: new FutureBuilder(

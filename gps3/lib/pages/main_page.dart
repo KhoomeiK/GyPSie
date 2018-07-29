@@ -41,7 +41,6 @@ class BlueInfo {
   }
 }
 
-
 class MainPageState extends State<MainPage> {
   int index = 0;
   final scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -59,14 +58,15 @@ class MainPageState extends State<MainPage> {
   Algorithm _backEnd = new Algorithm();
 
   void _showSnackBar() {
-      _scaffoldstate.currentState.showSnackBar(new SnackBar(
-        content: new Text("No Pulse Bands paired!"),
-      ));
+    _scaffoldstate.currentState.showSnackBar(new SnackBar(
+      content: new Text("No Pulse Bands paired!"),
+    ));
   }
+
   void _showSnackBar2() {
-      _scaffoldstate.currentState.showSnackBar(new SnackBar(
-        content: new Text("Please fill in required fields!"),
-      ));
+    _scaffoldstate.currentState.showSnackBar(new SnackBar(
+      content: new Text("Please fill in required fields!"),
+    ));
   }
 
   void _submit() {
@@ -74,12 +74,12 @@ class MainPageState extends State<MainPage> {
     if (form.validate()) {
       form.save();
       if (pulse == 1) origin1 = "current location";
-      if (globals.isConnected==false)
-      _showSnackBar();
+      if (globals.isConnected == false)
+        _showSnackBar();
       else if (origin1 == null || destination == null)
-      _showSnackBar2();
+        _showSnackBar2();
       else
-      globals.globalDevice.setPoints(origin1, destination);
+        globals.globalDevice.setPoints(origin1, destination);
     }
   }
 
@@ -122,10 +122,10 @@ class MainPageState extends State<MainPage> {
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
       onPressed: () {
         _submit();
-        if (globals.isConnected==false)
-      _showSnackBar();
-      else if (origin1 == null || destination == null)
-      _showSnackBar2();
+        if (globals.isConnected == false)
+          _showSnackBar();
+        else if (origin1 == null || destination == null)
+          _showSnackBar2();
         else
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MapsPage()));
@@ -156,7 +156,7 @@ class MainPageState extends State<MainPage> {
     );
   }
 
-   Widget _buildBottomNav() {
+  Widget _buildBottomNav() {
     return new BottomNavigationBar(
       currentIndex: 1,
       onTap: (index) {
@@ -166,9 +166,8 @@ class MainPageState extends State<MainPage> {
               context, MaterialPageRoute(builder: (context) => MainPage2()));
         }
         if (index == 2) {
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BluetoothPage())
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BluetoothPage()));
         }
       },
       items: <BottomNavigationBarItem>[
@@ -178,8 +177,7 @@ class MainPageState extends State<MainPage> {
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title:
-              new Text("Navigation"),
+          title: new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.bluetooth),
@@ -293,20 +291,21 @@ class MainPageState extends State<MainPage> {
       bottomNavigationBar: _buildBottomNav(),
     );
   }
-    _connectionState() {
+
+  _connectionState() {
     if (globals.isConnected == true)
       return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Text("Bluetooth: "),
-          Text("Connected", style: TextStyle(color: Colors.green)),
-        ]);
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text("Bluetooth: "),
+            Text("Connected", style: TextStyle(color: Colors.green)),
+          ]);
     else
       return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Text("Bluetooth: "),
-          Text("Disconnected", style: TextStyle(color: Colors.red)),
-        ]);
-}
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text("Bluetooth: "),
+            Text("Disconnected", style: TextStyle(color: Colors.red)),
+          ]);
+  }
 }
