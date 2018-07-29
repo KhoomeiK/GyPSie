@@ -19,7 +19,7 @@ class Algorithm {
   StreamSubscription<ScanResult> scanSubscription;
   StreamSubscription<BluetoothDeviceState> deviceConnection;
   BluetoothDevice mainBand;
-  int i =0;
+  int i = 0;
   bool repeating = false;
   bool stillThere = false;
   List<BlueInfo> locald = [];
@@ -34,57 +34,41 @@ class Algorithm {
 
   scan() {
     {
-    // connect to bluetooth device
-    print("scanning to start");
-    // remove();
-    scanSubscription = blue.scan().listen((scanResult) {
-    // do something with scan result
-      BlueInfo d =
-          new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
-      locald.add(d);
-        for (int i = 0; i<globals.devices.length; i++)
-        {
-          if (d.iD==globals.devices[i].iD)
-               repeating=true; 
-
+      // connect to bluetooth device
+      print("scanning to start");
+      // remove();
+      scanSubscription = blue.scan().listen((scanResult) {
+        // do something with scan result
+        BlueInfo d = new BlueInfo(
+            scanResult.device.name, scanResult.device.id.toString());
+        locald.add(d);
+        for (int i = 0; i < globals.devices.length; i++) {
+          if (d.iD == globals.devices[i].iD) repeating = true;
         }
-        if (repeating==false)
-        {
+        if (repeating == false) {
           globals.devices.add(d);
-        }
-        else if (repeating = true)
-        repeating = false;
-        
+        } else if (repeating = true) repeating = false;
+
         print(globals.devices);
         print(locald);
-    });
-
-
-  }
+      });
+    }
   }
 
-  
-  remove()
-  {
-       for (int k = globals.devices.length; k>0; k--)
-        {
-          for (int j = 0; j<locald.length; j++)
-          {
-            if (globals.devices[k-1].iD==locald[j].iD)
-            stillThere=true;
-            
-          }
-          if (stillThere==false)
-           { globals.devices.remove(globals.devices[k-1]);
-            print('k');
-           }
-          stillThere = false;
-
-        }
-        for (int i = locald.length-1;i>=0;i--)
-        {
-          locald.remove(locald[i]);
-        }
+  remove() {
+    for (int k = globals.devices.length; k > 0; k--) {
+      for (int j = 0; j < locald.length; j++) {
+        if (globals.devices[k - 1].iD == locald[j].iD) stillThere = true;
+      }
+      if (stillThere == false) {
+        globals.devices.remove(globals.devices[k - 1]);
+        print('k');
+      }
+      stillThere = false;
+    }
+    for (int i = locald.length - 1; i >= 0; i--) {
+      locald.remove(locald[i]);
+    }
   }
 
   connect(BluetoothDevice band) async {
@@ -93,7 +77,7 @@ class Algorithm {
       // stream connection to device
       if (s == BluetoothDeviceState.connected) {
         // if connected// end scan once found device
-          
+
         scanSubscription.cancel();
         globals.isConnected = true;
         mainBand = band;
@@ -157,15 +141,14 @@ class Algorithm {
     List<int> value = await mainBand
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
-    
+
     print("WHICH SIDE-----------------------------------------");
     int val = 0;
     String side = "";
     side = determineSide(i);
     print(side);
     if (side == "right") {
-      if (dis > 200)
-        val = 51;
+      if (dis > 200) val = 51;
       if (dis <= 200 && dis >= 160)
         val = 104;
       else if (dis <= 159 && dis >= 120)
@@ -176,12 +159,10 @@ class Algorithm {
         val = 101;
       else if (dis <= 39 && dis >= 10)
         val = 100;
-      else if (dis < 10)
-        val = 18;
-      } // write to serv1 char0
+      else if (dis < 10) val = 18;
+    } // write to serv1 char0
     else if (side == "left") {
-      if (dis > 200)
-        val = 15;
+      if (dis > 200) val = 15;
       if (dis <= 200 && dis >= 160)
         val = 4;
       else if (dis <= 159 && dis >= 120)
@@ -192,15 +173,13 @@ class Algorithm {
         val = 1;
       else if (dis <= 39 && dis >= 10)
         val = 0;
-      else if (dis < 10)
-        val = 17;
-    }
-    else {
+      else if (dis < 10) val = 17;
+    } else {
       val = 15;
     }
 
     print("value: $val");
-    
+
     print("BLUETOOTH WRITE-----------------------------------------");
     await mainBand
         .writeCharacteristic(characteristics[0], [val]); // write to serv1 char0
@@ -228,7 +207,7 @@ class Algorithm {
   toRadians(deg) {
     // convert degree to radians for dist function
     return deg * Math.pi / 180;
-  } 
+  }
 
   // convert below to stream
   dist(lat2, lon2) async {
@@ -271,7 +250,8 @@ class Algorithm {
       else if (steps[i]["html_instructions"].toString().indexOf("right") != -1)
         side = "right";
       else {
-        print("Could not determine whether to turn right or left"); // change eventually
+        print(
+            "Could not determine whether to turn right or left"); // change eventually
         Vibrate.vibrate();
       }
     }
@@ -336,13 +316,15 @@ class Algorithm {
         await dist(legs["end_location"]["lat"], legs["end_location"]["lng"]) >
             30) {
       // while not arrived at final destination
-      print(await dist(legs["end_location"]["lat"], legs["end_location"]["lng"])); // distance to final destination
+      print(await dist(legs["end_location"]["lat"],
+          legs["end_location"]["lng"])); // distance to final destination
 
       globals.next = steps[i]["html_instructions"]; // next step
       print(globals.next);
       num dis = await dist(
           steps[i]["start_location"]["lat"],
-          steps[i]["start_location"]["lng"]); // distance between cur and next waypoint
+          steps[i]["start_location"]
+              ["lng"]); // distance between cur and next waypoint
       print(dis);
 
       if (globals.canceled) {
@@ -357,8 +339,7 @@ class Algorithm {
         print("transmit func fin");
         if (dis < 30) {
           i++; // go to next step
-          if (i == steps.length)
-            print('${steps[--i]["html_instructions"]}');
+          if (i == steps.length) print('${steps[--i]["html_instructions"]}');
           transmit(205, i);
         }
       }

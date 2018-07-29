@@ -33,7 +33,7 @@ class TutorialPageState extends State<TutorialPage> {
                 onTap: () {},
                 child: Icon(Icons.account_box),
               )),
-              SizedBox(width: 17.0),
+          SizedBox(width: 17.0),
         ],
       ),
       body: Container(
@@ -87,7 +87,7 @@ class TutorialPageState extends State<TutorialPage> {
                 onPressed: () {
                   // globals.globalDevice.transmit(200, 1);
                   globals.globalDevice.transmitTestRight();
-                  },
+                },
                 color: Colors.lightBlue,
                 splashColor: Colors.blue,
               )
@@ -105,7 +105,7 @@ class TutorialPageState extends State<TutorialPage> {
   //   });
   // }
 
-    Widget _buildBottomNav() {
+  Widget _buildBottomNav() {
     return new BottomNavigationBar(
       onTap: (index) {
         this.index = index;
@@ -118,9 +118,8 @@ class TutorialPageState extends State<TutorialPage> {
               context, MaterialPageRoute(builder: (context) => MainPage()));
         }
         if (index == 2) {
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BluetoothPage())
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => BluetoothPage()));
         }
       },
       items: <BottomNavigationBarItem>[
@@ -130,8 +129,7 @@ class TutorialPageState extends State<TutorialPage> {
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title:
-              new Text("Navigation"),
+          title: new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.bluetooth),

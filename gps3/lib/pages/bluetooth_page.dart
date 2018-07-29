@@ -23,7 +23,7 @@ class BluetoothPageState extends State<BluetoothPage> {
   MainPage2State lol;
   final GlobalKey<ScaffoldState> _scaffoldstate =
       new GlobalKey<ScaffoldState>();
-      int i =0;
+  int i = 0;
 
   update() async {
     await globals.globalDevice.scan();
@@ -31,7 +31,6 @@ class BluetoothPageState extends State<BluetoothPage> {
     print(i);
     return globals.devices;
     // await new Future.delayed(new Duration(seconds: 3));
-
   }
 
   void _showSnackBar() {
@@ -51,7 +50,7 @@ class BluetoothPageState extends State<BluetoothPage> {
     globals.globalDevice.disconnect();
   }
 
-    Widget _buildBottomNav() {
+  Widget _buildBottomNav() {
     return new BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: 2,
@@ -73,8 +72,7 @@ class BluetoothPageState extends State<BluetoothPage> {
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.navigation),
-          title:
-              new Text("Navigation"),
+          title: new Text("Navigation"),
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.bluetooth),
@@ -267,7 +265,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                       return createListView(context, snapshot);
                 }
               }),
-              SizedBox(width: 10.0),
+          SizedBox(width: 10.0),
         ],
       ),
       body: new FutureBuilder(
