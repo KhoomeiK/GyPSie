@@ -270,7 +270,6 @@ class Algorithm {
         globals.markers.add(new Marker(i.toString(), "Waypoint",
             steps[i]["start_location"]["lat"], steps[i]["start_location"]["lng"],
             color: Colors.cyan));
-
     }
     loop();
   }
