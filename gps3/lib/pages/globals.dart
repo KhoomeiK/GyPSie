@@ -9,7 +9,7 @@ bool isLoggedIn = false;
 bool isConnected = false;
 bool canceled = false;
 
-List<BlueInfo> devices = [new BlueInfo("Name", "ID")];
+List<BlueInfo> devices = [];
 Algorithm globalDevice = new Algorithm();
 Algorithm globalDevice2 = new Algorithm();
 

@@ -19,6 +19,10 @@ class Algorithm {
   StreamSubscription<ScanResult> scanSubscription;
   StreamSubscription<BluetoothDeviceState> deviceConnection;
   BluetoothDevice mainBand;
+  int i =0;
+  bool repeating = false;
+  bool stillThere = false;
+  List<BlueInfo> locald = [];
 
   Algorithm() {
     // constructor
@@ -29,15 +33,58 @@ class Algorithm {
   }
 
   scan() {
+    {
     // connect to bluetooth device
     print("scanning to start");
+    // remove();
     scanSubscription = blue.scan().listen((scanResult) {
+    // do something with scan result
       BlueInfo d =
           new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
-      // new blueinfo object for device
-      if (globals.devices.indexOf(d) == -1)
-        globals.devices.add(d); // only add new devices to list
+      locald.add(d);
+        for (int i = 0; i<globals.devices.length; i++)
+        {
+          if (d.iD==globals.devices[i].iD)
+               repeating=true; 
+
+        }
+        if (repeating==false)
+        {
+          globals.devices.add(d);
+        }
+        else if (repeating = true)
+        repeating = false;
+        
+        print(globals.devices);
+        print(locald);
     });
+
+
+  }
+  }
+
+  
+  remove()
+  {
+       for (int k = globals.devices.length; k>0; k--)
+        {
+          for (int j = 0; j<locald.length; j++)
+          {
+            if (globals.devices[k-1].iD==locald[j].iD)
+            stillThere=true;
+            
+          }
+          if (stillThere==false)
+           { globals.devices.remove(globals.devices[k-1]);
+            print('k');
+           }
+          stillThere = false;
+
+        }
+        for (int i = locald.length-1;i>=0;i--)
+        {
+          locald.remove(locald[i]);
+        }
   }
 
   connect(BluetoothDevice band) async {
@@ -45,8 +92,9 @@ class Algorithm {
     deviceConnection = blue.connect(band).listen((s) {
       // stream connection to device
       if (s == BluetoothDeviceState.connected) {
-        // if connected
-        scanSubscription.cancel(); // end scan once found device
+        // if connected// end scan once found device
+          
+        scanSubscription.cancel();
         globals.isConnected = true;
         mainBand = band;
         globals.devices.clear();
@@ -121,8 +169,8 @@ class Algorithm {
     side = determineSide(i);
     print(side);
     // left doesnt stop buzzing, maybe just lag tho for this
-    //     
     // right doesnt stop buzzing even when dis = 500, need to send stop message
+
    /*
    RangeError (index): Invalid value: Not in range 0..3, inclusive: 4
 #0      List.[] (dart:core/runtime/libgrowable_array.dart:141:60)
