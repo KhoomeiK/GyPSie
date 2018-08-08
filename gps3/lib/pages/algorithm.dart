@@ -33,26 +33,25 @@ class Algorithm {
   }
 
   scan() {
-    {
-      // connect to bluetooth device
-      print("scanning to start");
-      // remove();
-      scanSubscription = blue.scan().listen((scanResult) {
-        // do something with scan result
-        BlueInfo d = new BlueInfo(
-            scanResult.device.name, scanResult.device.id.toString());
-        locald.add(d);
-        for (int i = 0; i < globals.devices.length; i++) {
-          if (d.iD == globals.devices[i].iD) repeating = true;
-        }
-        if (repeating == false) {
-          globals.devices.add(d);
-        } else if (repeating = true) repeating = false;
+    // connect to bluetooth device
+    print("scanning to start");
+    // remove();
+    scanSubscription = blue.scan().listen((scanResult) {
+      // do something with scan result
+      BlueInfo d =
+          new BlueInfo(scanResult.device.name, scanResult.device.id.toString());
+      locald.add(d);
+      for (int i = 0; i < globals.devices.length; i++) {
+        if (d.iD == globals.devices[i].iD) repeating = true;
+      }
+      if (!repeating)
+        globals.devices.add(d);
+      else
+        repeating = false;
 
-        print(globals.devices);
-        print(locald);
-      });
-    }
+      print(globals.devices);
+      print(locald);
+    });
   }
 
   remove() {
@@ -60,9 +59,9 @@ class Algorithm {
       for (int j = 0; j < locald.length; j++) {
         if (globals.devices[k - 1].iD == locald[j].iD) stillThere = true;
       }
-      if (stillThere == false) {
+      if (!stillThere) {
         globals.devices.remove(globals.devices[k - 1]);
-        print('k');
+        print(k);
       }
       stillThere = false;
     }
@@ -175,7 +174,7 @@ class Algorithm {
         val = 0;
       else if (dis < 10) val = 17;
     } else {
-      val = 15;
+      val = 16; // turn off both right and left
     }
 
     print("value: $val");
@@ -294,8 +293,11 @@ class Algorithm {
             steps[i]["end_location"]["lat"], steps[i]["end_location"]["lng"],
             color: Colors.red));
       else
-        globals.markers.add(new Marker(i.toString(), "Waypoint",
-            steps[i]["start_location"]["lat"], steps[i]["start_location"]["lng"],
+        globals.markers.add(new Marker(
+            i.toString(),
+            "Waypoint",
+            steps[i]["start_location"]["lat"],
+            steps[i]["start_location"]["lng"],
             color: Colors.cyan));
     }
     loop();

@@ -21,6 +21,7 @@ void loop() {
       '5'
     };
     switch (i) {
+    // right
     case 0:
       while (Serial.available() <= 0)
         vib(100);
@@ -49,6 +50,8 @@ void loop() {
       while (Serial.available() <= 0)
         analogWrite(3, 200);
       break;
+    
+    // left
     case 100:
       c[3] = '0';
       vw_send((uint8_t * ) c, 4);
@@ -74,15 +77,24 @@ void loop() {
       vw_send((uint8_t * ) c, 4);
       vw_wait_tx();
       break;
-    case 51:
+    case 51: // stop
       c[3] = '5';
       vw_send((uint8_t * ) c, 4);
       vw_wait_tx();
       break;
-    case 18:
+    case 18: // cont
       c[3] = '6';
       vw_send((uint8_t * ) c, 4);
       vw_wait_tx();
+      break;
+
+    case 16: // stop both
+      c[3] = '5';
+      vw_send((uint8_t * ) c, 4);
+      vw_wait_tx();
+
+      while (Serial.available() <= 0)
+        analogWrite(3, 0);
       break;
     }
   }
