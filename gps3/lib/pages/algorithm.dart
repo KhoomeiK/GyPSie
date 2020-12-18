@@ -123,8 +123,7 @@ class Algorithm {
         .readCharacteristic(characteristics[0]); // read serv1 char0
     print(value);
 
-    await mainBand
-        .writeCharacteristic(characteristics[0], [100]); // write to serv1 char0
+    await mainBand.writeCharacteristic(characteristics[0], [100]);
   }
 
   transmit(num dis, int i) async {
